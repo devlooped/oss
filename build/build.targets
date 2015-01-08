@@ -111,7 +111,7 @@
 	</Target>
 
 	<Target Name="FormatVersion">
-		<Exec Command='"$(NuGetExe)" Install packages.config -OutputDirectory "$(MSBuildThisFileDirectory)packages" -ExcludeVersion' />
+		<Exec Command='"$(NuGetExe)" Install "$(MSBuildThisFileDirectory)packages.config" -OutputDirectory "$(MSBuildThisFileDirectory)packages" -ExcludeVersion' />
 
 		<MSBuild Projects="$(MSBuildThisFileDirectory)packages\SemanticGit\build\SemanticGit.targets"
 				 Targets="SemanticGit:FormatVersion"

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>build</id>
+        <version>1.0</version>
+        <title>Ultimate Cross Platform Build and NuGet Restore</title>
+        <authors>kzu</authors>
+        <licenseUrl>https://github.com/kzu/oss/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/kzu/oss/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Ultimate Cross Platform Build and NuGet Restore</description>
+        <releaseNotes />
+        <copyright>Copyright 2015</copyright>
+        <tags>oss kzu</tags>
+    </metadata>
+    <files>
+		<file src="build.targets" />
+		<file src="nuget.targets" />
+		<file src="packages.config" />
+		<file src="..\build.proj" target="sample" />
+		<file src="..\src\Blank.sln" target="sample\src" />
+		<file src="..\src\Before.Blank.sln.targets" target="sample\src" />
+    </files>
+</package>

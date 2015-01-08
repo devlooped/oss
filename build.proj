@@ -41,6 +41,7 @@
 			<AdditionalProperties>Configuration=$(Configuration);TrackFileAccess=$(TrackFileAccess)</AdditionalProperties>
 		</Solution>
 		
+		<NuGet Include="**\*.nuspec" />
 	</ItemGroup>
 	
 	<Import Project="build\build.targets" />
