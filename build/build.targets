@@ -41,13 +41,14 @@
 		@(Project) is built before @(Solution), just in case specific project dependencies 
 		must be built before a full solution is built.	
 
+	@(NuGet):
+	NuGet packages to build. Can be a .nuspec or a project file that has an associated .nuspec.
+	NuGet.exe Pack is called on these items after the projects and solutions are built. 
+
 	$(VersionFormat):
 	Specifies a SemanticGit provided format string to populate the automatic $(Version) property 
-	during build. Default value: MAJOR.MINOR.PATCH
+	during build, which is passed to NuGet.exe when packing. Default value: MAJOR.MINOR.PATCH
 	
-	@(NuSpec):
-	The NuGet package specs to build after the projects and solutions are built. 
-
     -->
 
 	<PropertyGroup>
@@ -102,8 +103,8 @@
 		</BuildPackagesDependsOn>
 	</PropertyGroup>
 	
-	<Target Name="BuildPackages" DependsOnTargets="$(BuildPackagesDependsOn)" Condition="'@(NuSpec)' != ''">
-		<Exec Command='"$(NuGetExe)" Pack "(PackageProject)" -NoPackageAnalysis -NonInteractive -Version $(Version)'
+	<Target Name="BuildPackages" DependsOnTargets="$(BuildPackagesDependsOn)" Condition="'@(NuGet)' != ''">
+		<Exec Command='"$(NuGetExe)" Pack "@(NuGet)" -NoPackageAnalysis -NonInteractive -Version $(Version)'
 			  Condition="'%(Identity)' != ''" />
 
 		<Message Importance="high" Text="Built $(Version)" />
