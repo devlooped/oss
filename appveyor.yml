@@ -11,7 +11,7 @@ deploy:
       appveyor_repo_tag: true
 
   - provider: GitHub
-    release: $(APPVEYOR_REPO_TAG)
+    release: $(APPVEYOR_REPO_TAG_NAME)
     auth_token:
       secure: KHtOs4iYxe8vh6Scnqzagz9iRTouZc5LzSgkGtJjNkLPqFRNtENz8J/x47YXP7RG
     artifact: /.*\.nupkg/
