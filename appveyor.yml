@@ -1,26 +1,43 @@
+build:
+  project: build.proj
+
 deploy:
-  provider: NuGet
-  api_key:
-    secure: Ie7C0UoQ6Q18B9cyczb70wRyrimai7EZZefPV7SVRbU0wTnozUd3yQ+N6NmzCPTu
-  artifact: /.*\.nupkg/
-  
+  - provider: NuGet
+    api_key:
+      secure: Ie7C0UoQ6Q18B9cyczb70wRyrimai7EZZefPV7SVRbU0wTnozUd3yQ+N6NmzCPTu
+    artifact: /.*\.nupkg/
+    on:
+      appveyor_repo_tag: true
+
+  - provider: GitHub
+    release: $(APPVEYOR_REPO_TAG)
+    auth_token:
+      secure: KHtOs4iYxe8vh6Scnqzagz9iRTouZc5LzSgkGtJjNkLPqFRNtENz8J/x47YXP7RG
+    artifact: /.*\.nupkg/
+    draft: false
+    prerelease: false
+    on:
+      appveyor_repo_tag: true
+      
 nuget:
-  account_feed: true
   project_feed: true
   disable_publish_on_pr: true
   
-build:
-  project: build.proj
-  
 artifacts:
   - path: '*.nupkg'
+    name: Packages
   
 notifications:
   - provider: Email
     to:
       - daniel@cazzulino.com
-    subject: '[kzu/oss] Building {{buildVersion}}'
-    message: "{{status}} - {{message}} ({{commitId}})"
-    on_build_status_changed: true    
-    on_build_success: true
+    subject: '[kzu/oss] Build Failed'
+    message: "{{message}} ({{commitId}})"
     on_build_failure: true
+
+  - provider: Email
+    to:
+      - daniel@cazzulino.com
+    subject: '[kzu/oss] Build Succeeded'
+    message: "{{message}} ({{commitId}})"
+    on_build_success: true
