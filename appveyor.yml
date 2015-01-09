@@ -7,6 +7,7 @@ deploy:
       secure: Ie7C0UoQ6Q18B9cyczb70wRyrimai7EZZefPV7SVRbU0wTnozUd3yQ+N6NmzCPTu
     artifact: /.*\.nupkg/
     on:
+      branch: master
       appveyor_repo_tag: true
 
   - provider: GitHub
@@ -17,6 +18,7 @@ deploy:
     draft: false
     prerelease: false
     on:
+      branch: master
       appveyor_repo_tag: true
       
 nuget:
