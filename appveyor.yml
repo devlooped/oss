@@ -28,18 +28,3 @@ nuget:
 artifacts:
   - path: '*.nupkg'
     name: Packages
-  
-notifications:
-  - provider: Email
-    to:
-      - daniel@cazzulino.com
-    subject: '[kzu/oss] Build Failed'
-    message: "{{message}} ({{commitId}})"
-    on_build_failure: true
-
-  - provider: Email
-    to:
-      - daniel@cazzulino.com
-    subject: '[kzu/oss] Build Succeeded'
-    message: "{{message}} ({{commitId}})"
-    on_build_success: true
