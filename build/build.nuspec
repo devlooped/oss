@@ -4,7 +4,7 @@
         <id>build</id>
         <version>1.0</version>
         <title>Ultimate Cross Platform Build and NuGet Restore</title>
-        <authors>kzu</authors>
+        <authors>Daniel Cazzulino, kzu</authors>
         <licenseUrl>https://github.com/kzu/oss/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/kzu/oss/</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
