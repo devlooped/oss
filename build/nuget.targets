@@ -1,12 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
-	<PropertyGroup>
-		<NuGetExe Condition="'$(OS)' == 'Windows_NT'">$(MSBuildThisFileDirectory).nuget\NuGet.exe</NuGetExe>
-		<NuGetExe Condition="'$(OS)' != 'Windows_NT'">nuget</NuGetExe>
+	<PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+		<NuGetPath>$(MSBuildThisFileDirectory).nuget</NuGetPath>
+		<NuGetExe>$(NuGetPath)\NuGet.exe</NuGetExe>
+		<CachedNuGet>$(LocalAppData)\NuGet\NuGet.exe</CachedNuGet>	
 	</PropertyGroup>
 
-	<Target Name="RestorePackages" BeforeTargets="Build" DependsOnTargets="DownloadNuGet">
+	<PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+		<NuGetExe>nuget</NuGetExe>
+	</PropertyGroup>
+
+	<Target Name="RestorePackages" BeforeTargets="Build" DependsOnTargets="GetNuGet">
 		<Exec Command="&quot;$(NuGetExe)&quot; Restore &quot;$(SolutionPath)&quot;" Condition="'$(SolutionPath)' != ''" />
 		<Exec Command="&quot;$(NuGetExe)&quot; Install packages.config -OutputDirectory packages -ExcludeVersion" Condition="Exists('packages.config')" />
 	</Target>
@@ -19,8 +24,10 @@
 		<CodeTaskAssembly Condition="'$(MSBuildAssemblyVersion)' != '' and '$(MSBuildAssemblyVersion)' &gt;= '14.0'">$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll</CodeTaskAssembly>
 	</PropertyGroup>
 
-	<Target Name="DownloadNuGet" Condition="'$(OS)' == 'Windows_NT' And !Exists('$(NuGetExe)')">
-		<DownloadNuGet TargetPath="$(NuGetExe)" />
+	<Target Name="GetNuGet" Condition="'$(OS)' == 'Windows_NT' And !Exists('$(NuGetExe)')">
+		<MakeDir Directories="$(NuGetPath)" Condition="!Exists($(NuGetPath))" />
+		<DownloadNuGet TargetPath="$(CachedNuGet)" Condition="!Exists($(NuGetExe)) And !Exists($(CachedNuGet))" />
+		<Copy SourceFiles="$(CachedNuGet)" DestinationFolder="$(NuGetPath)" Condition="!Exists($(NuGetExe))" />
 	</Target>
 
 	<UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(CodeTaskAssembly)">
