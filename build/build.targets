@@ -52,7 +52,7 @@
     -->
 
 	<PropertyGroup>
-		<VersionFormat Condition="'$(VersionFormat)' == ''">MAJOR.MINOR.PATCH</VersionFormat>
+		<VersionFormat Condition="'$(VersionFormat)' == ''">MAJOR.MINOR.PATCH-PRE</VersionFormat>
 	</PropertyGroup>
 
 	<PropertyGroup>
