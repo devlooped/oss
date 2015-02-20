@@ -3,6 +3,10 @@ kzu's ultimate oss structure
 
 For my new open source projects, this is the basic repository structure and build approach I'm going to use. 
 
+[![Build status](https://img.shields.io/appveyor/ci/kzu/oss.svg)](https://ci.appveyor.com/project/kzu/build)
+[![NuGet downloads](https://img.shields.io/nuget/dt/build.svg)](https://www.nuget.org/packages/build)
+[![Version](https://img.shields.io/nuget/v/build.svg)](https://www.nuget.org/packages/build)
+
 ## Goals
 
 1. [Automatic NuGet Restore](http://www.cazzulino.com/ultimate-cross-platform-nuget-restore.html): should work automatically for IDE builds, msbuild and CI builds. 
