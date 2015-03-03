@@ -22,4 +22,4 @@ IF NOT EXIST packages.config goto run
 build\.nuget\NuGet.exe install packages.config -OutputDirectory packages -ExcludeVersion
 
 :run
-msbuild /nologo /v:minimal %1 %2 %3 %4 %5 %6 %7 %8 %9
+msbuild build.proj /nologo /v:minimal %1 %2 %3 %4 %5 %6 %7 %8 %9
