@@ -1,5 +1,8 @@
-build:
-  project: build.proj
+init:
+  - git config --global core.autocrlf input
+
+build_script:
+  - build.cmd
 
 deploy:
   - provider: NuGet
