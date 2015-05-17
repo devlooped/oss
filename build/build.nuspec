@@ -28,6 +28,7 @@ Updating the package is achieved by just executing the install command again.</d
 		<file src="packages.config" />
 		<file src="..\build.proj" target="sample" />
 		<file src="..\build.cmd" target="sample" />
+		<file src="..\xbuild.proj" target="sample" />
 		<file src="sample\appveyor.yml" target="sample\appveyor.yml" />
 		<file src="..\src\Blank.sln" target="sample\src" />
 		<file src="..\src\Before.Blank.sln.targets" target="sample\src" />
