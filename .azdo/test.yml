@@ -1,0 +1,11 @@
+steps:
+  - task: VSTest@2
+    displayName: Test
+    inputs:
+      testAssemblyVer2: '$(src)/**/bin/**/*Tests.dll'
+      runInParallel: true
+      codeCoverageEnabled: true
+      publishRunAttachments: true
+      diagnosticsEnabled: false
+      rerunFailedTests: true
+      

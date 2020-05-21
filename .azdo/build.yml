@@ -1,0 +1,18 @@
+steps:
+  - script: dotnet tool update -g --version $(DotNetFormatVersion) dotnet-format >nul || dotnet tool list -g
+    displayName: 'UseDotNetFormat'
+
+  - script: 'dotnet format -f $(src) --dry-run --check -v:diag'
+    displayName: Check .editorconfig compliance
+
+  - task: MSBuild@1
+    displayName: Restore
+    inputs:
+      solution: '$(src)/*.sln'
+      msbuildArguments: '-r -t:version -bl:$(Pipeline.Workspace)/log/restore.binlog'
+    
+  - task: MSBuild@1
+    displayName: Build
+    inputs:
+      solution: '$(src)/*.sln'
+      msbuildArguments: '-p:PackageOutputPath=$(pack) -bl:$(Pipeline.Workspace)/log/build.binlog'

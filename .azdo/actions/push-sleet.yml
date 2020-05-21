@@ -1,0 +1,18 @@
+# Pushes packages to an Azure sleet feed
+
+parameters:
+  connectionString: 'DefaultEndpointsProtocol=https;AccountName=;AccountKey=;BlobEndpoint='
+  container: 'public'
+  packages: '$(pack)'
+  condition: succeeded()
+
+steps:
+- template: use-dotnet-tool.yml
+  parameters:
+    id: 'sleet'
+    version: 2.3.33
+    condition: ${{ parameters.condition }}
+
+- script: 'sleet push --config none ${{ parameters.packages }} -f --verbose -p "SLEET_FEED_CONTAINER=${{ parameters.container }}" -p "SLEET_FEED_CONNECTIONSTRING=${{ parameters.connectionString }}" -p "SLEET_FEED_TYPE=azure"'
+  displayName: 'Push packages via Sleet'
+  condition: ${{ parameters.condition }}

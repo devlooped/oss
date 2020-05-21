@@ -1,0 +1,67 @@
+<Project>
+
+  <PropertyGroup Label="CI" Condition="'$(CI)' == ''">
+    <CI>false</CI>
+    <CI Condition="'$(TF_BUILD)' == 'true'">true</CI>
+  </PropertyGroup>
+
+  <PropertyGroup Label="CI" Condition="'$(PR)' == ''">
+    <PR>false</PR>
+    <PR Condition="'$(SYSTEM_PULLREQUEST_PULLREQUESTNUMBER)' != ''">true</PR>
+  </PropertyGroup>
+
+  <PropertyGroup Label="GitInfo">
+    <GitSkipCache>$(CI)</GitSkipCache>
+    <!-- We do version from rel/v... branch -->
+    <GitIgnoreTagVersion>true</GitIgnoreTagVersion>
+
+    <!-- Prefer AzDO-determined main or PR branch -->
+    <GitBranch Condition="'$(SYSTEM_PULLREQUEST_SOURCEBRANCH)' != ''">$(SYSTEM_PULLREQUEST_SOURCEBRANCH)</GitBranch>
+    <GitBranch Condition="'$(SYSTEM_PULLREQUEST_TARGETBRANCH)' == '' and '$(BUILD_SOURCEBRANCH)' != ''">$(BUILD_SOURCEBRANCH)</GitBranch>
+    <GitBranch Condition="$(GitBranch.StartsWith('refs/heads'))">$(GitBranch.Substring(11))</GitBranch>
+    <!-- Simply rel/xxx => xxx. Allows using rel/v1.0.0, say, to group versioned branches/releases -->
+    <GitBranch Condition="$(GitBranch.StartsWith('rel/'))">$(GitBranch.Substring(4))</GitBranch>
+    <GitBranch>$(GitBranch.Replace('/', '-').Replace('~', '-'))</GitBranch>
+  </PropertyGroup>
+
+  <!-- In AzDO, prefer specified version -->
+  <PropertyGroup Label="CI" Condition="'$(BUILD_SOURCEVERSION)' != ''">
+    <GitSha>$(BUILD_SOURCEVERSION)</GitSha>
+    <GitCommit>$(GitSha.Substring(0, 9))</GitCommit>
+  </PropertyGroup>
+
+  <!-- In AzDO, use the determined PR source commit -->
+  <PropertyGroup Label="CI" Condition="'$(SYSTEM_PULLREQUEST_SOURCECOMMITID)' != ''">
+    <GitSha>$(SYSTEM_PULLREQUEST_SOURCECOMMITID)</GitSha>
+    <GitCommit>$(GitSha.Substring(0, 9))</GitCommit>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet">
+    <Authors>kzu</Authors>
+    <Company>Devlooped</Company>
+
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <LangVersion>Latest</LangVersion>
+
+    <!-- We don't mind using SemVer 2.0. See https://docs.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5105 -->
+    <NoWarn>NU5105;$(NoWarn)</NoWarn>
+
+    <!-- Because it reads sooo much nicer than GeneratePackageOnBuild! -->
+    <PackOnBuild Condition="$(CI) or '$(BuildingInsideVisualStudio)' != 'true'">true</PackOnBuild>
+
+    <GeneratePackageOnBuild>$(PackOnBuild)</GeneratePackageOnBuild>
+    <PackageOutputPath Condition="'$(PackOnBuild)' == 'true' And '$(PackageOutputPath)' == ''">$(MSBuildThisFileDirectory)..\pack</PackageOutputPath>
+    <DefaultItemExcludes>$(DefaultExcludeItems);*.binlog;*.zip</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <!-- This target is replaced by GitInfo when restored -->
+  <Target Name="GitVersion" />
+
+  <!-- Import [project].props if it exists -->
+  <Import Project="$(MSBuildProjectDirectory)\$(MSBuildProjectName).props" Condition="'$(MSBuildProjectExtension)' != '.props' And Exists('$(MSBuildProjectDirectory)\$(MSBuildProjectName).props')" />
+</Project>

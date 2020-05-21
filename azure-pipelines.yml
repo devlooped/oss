@@ -1,0 +1,20 @@
+trigger:
+  batch: false
+  paths:
+    exclude:
+    - docs
+
+variables:
+- template: .azdo/variables.yml
+
+pool:
+  vmImage: 'windows-2019'
+steps:
+- template: .azdo/prepare.yml
+- checkout: self
+  clean: true
+  submodules: recursive
+- template: .azdo/build.yml
+- template: .azdo/test.yml
+- template: .azdo/publish.yml
+- template: .azdo/push.yml

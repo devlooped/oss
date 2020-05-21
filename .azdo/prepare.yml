@@ -1,0 +1,10 @@
+# Common pre-checkout steps
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      version: $(DotNetVersion)
+      performMultiLevelLookup: true
+
+  - script: dotnet tool update -g --version $(PowerShellVersion) PowerShell >nul || dotnet tool list -g
+    displayName: 'UsePowerShell'
