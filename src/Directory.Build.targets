@@ -1,4 +1,5 @@
 <Project>
+  <!-- To extend/change the defaults, create a Directory.targets alongside this file -->
 
   <PropertyGroup>
     <!-- The Sdks\NuGet.Build.Tasks.Pack\build\NuGet.Build.Tasks.Pack.targets unconditionally sets 
@@ -71,6 +72,9 @@ Built from $(RepositoryUrl)/tree/$(SourceRevisionId.Substring(0, 9))</Descriptio
       <PackageDescription>$(Description)</PackageDescription>
     </PropertyGroup>
   </Target>
+
+  <!-- Import before UsingTask because first to declare tasks wins -->
+  <Import Project="Directory.targets" Condition="Exists('Directory.targets')"/>
 
   <!--
   ==============================================================

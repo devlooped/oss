@@ -1,4 +1,5 @@
 <Project TreatAsLocalProperty="VersionSuffix">
+  <!-- To extend/change the defaults, create a Directory.props alongside this file -->
 
   <PropertyGroup Label="NuGet">
     <Authors>kzu</Authors>
@@ -78,6 +79,16 @@
     <GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
   </PropertyGroup>
 
+  <ItemGroup Label="ThisAssembly.Project">
+    <ProjectProperty Include="Version" />
+    <ProjectProperty Include="VersionPrefix" />
+    <ProjectProperty Include="VersionSuffix" />
+
+    <ProjectProperty Include="PublicKey" />
+    <ProjectProperty Include="PublicKeyToken" />
+  </ItemGroup>
+
+
   <PropertyGroup Label="CI" Condition="'$(CI)' == ''">
     <CI>false</CI>
     <!-- GH, CircleCI, GitLab and BitBucket already use CI -->
@@ -95,4 +106,5 @@
     <ContinuousIntegrationBuild>$(CI)</ContinuousIntegrationBuild>
   </PropertyGroup>
 
+  <Import Project="Directory.props" Condition="Exists('Directory.props')"/>
 </Project>
