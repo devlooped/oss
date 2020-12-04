@@ -41,7 +41,7 @@ jobs:
           dotnet format -f --check -v:diag
 
       - name: 🙏 build
-        run: dotnet msbuild -r -m:1 -p:versionsuffix="$GITHUB_REF.$GITHUB_RUN_NUMBER"
+        run: dotnet build -m:1 -p:versionsuffix="$GITHUB_REF.$GITHUB_RUN_NUMBER"
 
       - name: 🧪 test
         run: dotnet test --no-build -m:1 --blame-hang --blame-hang-timeout 5m -d $GITHUB_WORKSPACE/logs/${{ matrix.os }}.txt -r $GITHUB_WORKSPACE/logs
