@@ -38,3 +38,36 @@ You can also just list detected changes with:
 ```
 dotnet file changes
 ```
+
+## Design Choices
+
+In no particular order:
+
+1. `src` folder contains `Directory.Build.props` and `Directory.Build.targets` 
+   and those contain all the customizations for the build, packaging and versioning. 
+   In the past I went crazy factoring the targets into multiple files with single 
+   purpose groupings and it [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) even for me, having written it all. So it's better to Keep Things Simple™.
+
+2. If a `src/Directory.Packages.props` is found, I turn on 
+   [centrally managed package versions](https://github.com/NuGet/Home/wiki/Centrally-managing-NuGet-package-versions), but it's not required. "Regular" versioning is more 
+   friendly with (as in it actually works) dependabot.
+    
+3. GitHub Actions are provided for the CI/CD process as follows:
+   - [Build](.github/workflows/build.yml): regular branch builds and PRs build, tested and packed on ubuntu-latest, 
+     windows-latest and macOS-latest with `dotnet` build, test and pack respectively.
+   - [Tags](.github/workflows/tag.yml): when a tag is pushed, a changelog is calculated from the previous tag 
+     and used as the body of a draft GitHub release. If the tag contains a prerelease 
+     label, the release is marked as such too. The [.github_changelog_generator](.github_changelog_generator) file 
+     defines [changelog generation options](https://github.com/github-changelog-generator/github-changelog-generator/wiki/Advanced-change-log-generation-examples).
+   - [Release](.github/workflows/release.yml): the draft release can be reviewed and edited and when ready, published. 
+     At this point, the release.yml workflow 
+
+4. `dotnet format` is enforced on builds to keep consistency with `.editorconfig`.
+
+5. [dependabot](.github/dependabot.yml) is configured to check for updated nuget packages every week.
+
+6. A default [icon.png](src/icon.png) and strong-name key is provided by default too. These may be removed 
+   as well from the initial `.netconfig` if the intention is to customize them for a particular project.
+
+7. [Bug](.github/ISSUE_TEMPLATE/bug.md) and [Feature](.github/ISSUE_TEMPLATE/feature.md) issue templates 
+   are provided.
