@@ -18,9 +18,7 @@
 *.tt text
 *.txt text
 
-
 # Some must always be checked out as lf so enforce that for those files
 # If these are not lf then bash/cygwin on windows will not be able to
 # excute the files
 *.sh text eol=lf
-
