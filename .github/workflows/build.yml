@@ -35,7 +35,7 @@ jobs:
         with:
           dotnet-version: 2.1.x
 
-      - name: ❱❱ format
+      - name: ✓ check formatting
         run: |
           dotnet tool update -g --version 4.1.* dotnet-format >nul || dotnet tool list -g
           dotnet format -f --check -v:diag
