@@ -19,11 +19,14 @@ dotnet file add https://github.com/kzu/oss
 This will fetch all files from this repo template and create a `.netconfig` file 
 containing all the downloaded entries. 
 
-At this point, you should remove from the `.netconfig` file the entries you don't 
-want to keep up-to-date afterwards, such as the `readme.md`. In any case, since 
-everything will be source controlled in your repository, at the time you update, 
-you can review what changed and whether you want to commit those changes in a case 
-by case basis.
+At this point, you should add a `skip` value to the `.netconfig` file for the entries 
+you don't want to keep up-to-date afterwards, such as the `readme.md`:
+
+```gitconfig
+[file "readme.md"]
+ url = https://github.com/kzu/oss/blob/main/readme.md
+ skip
+```
 
 ## Updating
 
@@ -47,10 +50,13 @@ In no particular order:
    and those contain all the customizations for the build, packaging and versioning. 
    In the past I went crazy factoring the targets into multiple files with single 
    purpose groupings and it [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) even for me, having written it all. So it's better to Keep Things Simple™.
+   Logically related properties and items have a `Label` attribute as documentation.
+   You can customize both by adding a `Directory.props` or `Directory.targets`, 
+   which are imported at the end of both files.
 
 2. If a `src/Directory.Packages.props` is found, I turn on 
    [centrally managed package versions](https://github.com/NuGet/Home/wiki/Centrally-managing-NuGet-package-versions), but it's not required. "Regular" versioning is more 
-   friendly with (as in it actually works) dependabot.
+   friendly with (as in it actually works) dependabot at the moment.
     
 3. GitHub Actions are provided for the CI/CD process as follows:
    - [Build](.github/workflows/build.yml): regular branch builds and PRs build, tested and packed on ubuntu-latest, 
@@ -66,8 +72,8 @@ In no particular order:
 
 5. [dependabot](.github/dependabot.yml) is configured to check for updated nuget packages every week.
 
-6. A default [icon.png](src/icon.png) and strong-name key is provided by default too. These may be removed 
-   as well from the initial `.netconfig` if the intention is to customize them for a particular project.
+6. A default [icon.png](src/icon.png) and strong-name key are provided by default too. These may be skipped 
+   as well in the `.netconfig` file if the intention is to customize them for a particular project.
 
 7. [Bug](.github/ISSUE_TEMPLATE/bug.md) and [Feature](.github/ISSUE_TEMPLATE/feature.md) issue templates 
    are provided.
