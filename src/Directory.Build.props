@@ -24,6 +24,8 @@
   </ItemGroup>
 
   <PropertyGroup Label="Build">
+    <LangVersion>Latest</LangVersion>
+
     <!-- Versioning: when building locally, it's always 42.42.42. 
          This makes it always bigger than any public package version, and 
          consistent and fixed for dogfooding. 
