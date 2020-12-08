@@ -1,7 +1,7 @@
 <Project>
   <!-- To extend/change the defaults, create a Directory.targets alongside this file -->
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(IsPackable)' == ''">
     <!-- The Sdks\NuGet.Build.Tasks.Pack\build\NuGet.Build.Tasks.Pack.targets unconditionally sets 
         PackageId=AssemblyName if no PackageId is provided, and then defaults IsPackable=true if 
         a PackageId is set (?!), meaning that by default everything is packable in Sdk-style 
@@ -13,6 +13,7 @@
         IsPackable a more sensible default, making it false if no PackageId was provided at this 
         point. -->
     <IsPackable Condition="'$(PackageId)' == ''">false</IsPackable>
+    <IsPackable Condition="'$(PackageId)' != ''">true</IsPackable>
   </PropertyGroup>
 
   <!-- Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultAssemblyInfo.targets does this and is imported 
