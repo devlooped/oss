@@ -61,7 +61,7 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);*.binlog;*.zip;*.rsp;*.items;**/TestResults/**/*.*</DefaultItemExcludes>
 
     <!-- We use a single oss signing key for consumers that need strong-named assemblies -->
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)oss.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)kzu.snk</AssemblyOriginatorKeyFile>
     <!-- These properties make it easier to add internals visible to other projects, even when signing is involved.
          For example, you can simply add: 
           <InternalsVisibleTo Include="MyProject.UnitTests" />
