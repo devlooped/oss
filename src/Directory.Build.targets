@@ -57,6 +57,14 @@
     <ProjectProperty Include="RepositoryCommit" />
   </ItemGroup>
 
+  <Target Name="SetRepositorySha" 
+          BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun" 
+          AfterTargets="InitializeSourceControlInformation">
+    <PropertyGroup>
+      <RepositorySha Condition="'$(SourceRevisionId)' != ''">$(SourceRevisionId.Substring(0, 9))</RepositorySha>
+    </PropertyGroup>
+  </Target>
+
   <!-- Always append the link to the direct source tree for the current build -->
   <Target Name="UpdatePackageMetadata"
           BeforeTargets="PrepareForBuild;GetAssemblyVersion;GetPackageMetadata;GenerateNuspec;Pack"
