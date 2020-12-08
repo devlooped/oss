@@ -1,11 +1,11 @@
 [file]
-  url = https://github.com/kzu/oss
+	url = https://github.com/kzu/oss
 [file ".netconfig"]
-  url = https://github.com/kzu/oss/blob/main/.netconfig
-  skip
+	url = https://github.com/kzu/oss/blob/main/.netconfig
+	skip
 [file "readme.md"]
-  url = https://github.com/kzu/oss/blob/main/readme.md
-  skip
+	url = https://github.com/kzu/oss/blob/main/readme.md
+	skip
 [file "src/icon.png"]
-  url = https://github.com/kzu/oss/blob/main/src/icon.png
-  skip
+	url = https://github.com/kzu/oss/blob/main/src/icon.png
+	skip
