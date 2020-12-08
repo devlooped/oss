@@ -61,7 +61,7 @@
   <Target Name="UpdatePackageMetadata"
           BeforeTargets="PrepareForBuild;GetAssemblyVersion;GetPackageMetadata;GenerateNuspec;Pack"
           DependsOnTargets="InitializeSourceControlInformation"
-          Condition="'$(SourceControlInformationFeatureSupported)' And
+          Condition="'$(SourceControlInformationFeatureSupported)' == 'true' And
                      '$(IsPackable)' == 'true' And 
                      '$(RepositoryUrl)' != '' And 
                      '$(SourceRevisionId)' != ''">
