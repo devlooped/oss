@@ -28,6 +28,9 @@ you don't want to keep up-to-date afterwards, such as the `readme.md`:
  skip
 ```
 
+> NOTE: you can also download the raw [.netconfig](.netconfig) from this repository 
+> and run `dotnet file update` instead. It already contains skips for readme and icon.
+
 ## Updating
 
 From this point on, applying template changes is as easy as running:
@@ -49,7 +52,7 @@ In no particular order:
 1. `src` folder contains `Directory.Build.props` and `Directory.Build.targets` 
    and those contain all the customizations for the build, packaging and versioning. 
    In the past I went crazy factoring the targets into multiple files with single 
-   purpose groupings and it [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) even for me, having written it all. So it's better to Keep Things Simple™.
+   purpose groupings and it [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) even for me, having written it all. So it's better to Keep Things Simpleï¿½.
    Logically related properties and items have a `Label` attribute as documentation.
    You can customize both by adding a `Directory.props` or `Directory.targets`, 
    which are imported at the end of both files.
