@@ -57,6 +57,9 @@
     <ProjectProperty Include="RepositoryCommit" />
   </ItemGroup>
 
+  <!-- Make sure the source control info is available before calling source generators -->
+  <Target Name="EnsureProjectInformation" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun" DependsOnTargets="InitializeSourceControlInformation" />
+
   <Target Name="SetRepositorySha" 
           BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun" 
           AfterTargets="InitializeSourceControlInformation">
