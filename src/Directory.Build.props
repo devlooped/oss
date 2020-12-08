@@ -1,4 +1,4 @@
-<Project TreatAsLocalProperty="VersionSuffix">
+<Project>
   <!-- To extend/change the defaults, create a Directory.props alongside this file -->
 
   <PropertyGroup Label="NuGet">
@@ -25,25 +25,6 @@
 
   <PropertyGroup Label="Build">
     <LangVersion>Latest</LangVersion>
-
-    <!-- Versioning: when building locally, it's always 42.42.42. 
-         This makes it always bigger than any public package version, and 
-         consistent and fixed for dogfooding. 
-         NuGetizer nukes the package cache on build, making this straightforward too.
-         CI (non-release) builds pass in a VersionSuffix property to append a label 
-         after the fixed prefix. This allows dogfooding a branch build.
-         The suffix is sanitized and optionally turned into 
-    -->
-    <VersionPrefix>42.42.42</VersionPrefix>
-    <VersionSuffix>$(VersionSuffix.Replace('refs/heads/', ''))</VersionSuffix>
-    <!-- For PRs, we just need a fixed package version numbered after the PR # itself, so remove the commits # at the end -->
-    <VersionSuffix Condition="$(VersionSuffix.Contains('refs/pull/'))">$(VersionSuffix.TrimEnd('.0123456789'))</VersionSuffix>
-    <!-- Next replace the prefix for simply 'pr', so we end up with 'pr99/merge' by default -->
-    <VersionSuffix>$(VersionSuffix.Replace('refs/pull/', 'pr'))</VersionSuffix>
-    <!-- Remove the /merge now, if present -->
-    <VersionSuffix>$(VersionSuffix.Replace('/merge', ''))</VersionSuffix>
-    <!-- Finally sanitize the branch with dashes, so we can build path-separated branches, like rel/v1.0.0 or feature/foo -->
-    <VersionSuffix>$(VersionSuffix.Replace('/', '-'))</VersionSuffix>
 
     <!-- See https://docs.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies -->
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
@@ -79,6 +60,33 @@
 
     <!-- Generate satellite assemblies using csc.exe to avoid some al.exe issues. See https://github.com/dotnet/msbuild/pull/2726 -->
     <GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Version">
+    <!-- Versioning: when building locally, it's always 42.42.42. 
+         This makes it always bigger than any public package version, and 
+         consistent and fixed for dogfooding. 
+         NuGetizer nukes the package cache on build, making this straightforward too.
+         CI (non-release) builds pass in a VersionSuffix property to append a label 
+         after the fixed prefix. This allows dogfooding a branch build.
+         The suffix is sanitized and optionally turned into 
+    -->
+    <VersionPrefix>42.42.42</VersionPrefix>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Version" Condition="$(VersionLabel) != ''">
+    <_VersionLabel>$(VersionLabel.Replace('refs/heads/', ''))</_VersionLabel>
+    <!-- For PRs, we just need a fixed package version numbered after the PR # itself, so remove the commits # at the end -->
+    <_VersionLabel Condition="$(_VersionLabel.Contains('refs/pull/'))">$(VersionLabel.TrimEnd('.0123456789'))</_VersionLabel>
+    <!-- Next replace the prefix for simply 'pr', so we end up with 'pr99/merge' by default -->
+    <_VersionLabel>$(_VersionLabel.Replace('refs/pull/', 'pr'))</_VersionLabel>
+    <!-- Remove the /merge now, if present -->
+    <_VersionLabel>$(_VersionLabel.Replace('/merge', ''))</_VersionLabel>
+    <!-- Finally sanitize the branch with dashes, so we can build path-separated branches, like rel/v1.0.0 or feature/foo -->
+    <_VersionLabel>$(_VersionLabel.Replace('/', '-'))</_VersionLabel>
+
+    <!-- Set sanitized version to the actual version suffix used in build/pack -->
+    <VersionSuffix>$(_VersionLabel)</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup Label="ThisAssembly.Project">
