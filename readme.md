@@ -20,13 +20,26 @@ This will fetch all files from this repo template and create a `.netconfig` file
 containing all the downloaded entries. 
 
 At this point, you should add a `skip` value to the `.netconfig` file for the entries 
-you don't want to keep up-to-date afterwards, such as the `readme.md`:
+you don't want to keep up-to-date afterwards. The default skips would likely match 
+the provided [.netconfig](.netconfig), plus any extra files you want to modify, for 
+example:
 
 ```gitconfig
+[file]
+    url = https://github.com/kzu/oss
+[file ".netconfig"]
+    url = https://github.com/kzu/oss/blob/main/.netconfig
+    skip
 [file "readme.md"]
- url = https://github.com/kzu/oss/blob/main/readme.md
- skip
-```
+    url = https://github.com/kzu/oss/blob/main/readme.md
+    skip
+[file "src/icon.png"]
+    url = https://github.com/kzu/oss/blob/main/src/icon.png
+    skip
+[file ".github/ISSUE_TEMPLATE/config.yml"]
+    url = https://github.com/kzu/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
+    skip
+ ```
 
 > NOTE: you can also download the raw [.netconfig](.netconfig) from this repository 
 > and run `dotnet file update` instead. It already contains skips for readme and icon.
