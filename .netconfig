@@ -9,3 +9,6 @@
 [file "src/icon.png"]
 	url = https://github.com/kzu/oss/blob/main/src/icon.png
 	skip
+[file ".github/ISSUE_TEMPLATE/config.yml"]
+	url = https://github.com/kzu/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
+	skip
