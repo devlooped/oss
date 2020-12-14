@@ -68,6 +68,9 @@
 
     <!-- See: https://www.cazzulino.com/project-dependencies-as-project-references.html -->
     <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
+
+    <!-- Don't warn for packages using semver 2.0 -->
+    <NoWarn>NU5105;$(NoWarn)</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="Version">
