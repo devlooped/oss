@@ -16,8 +16,23 @@ defaults:
     shell: bash
 
 jobs:
+  dotnet-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🤘 checkout
+        uses: actions/checkout@v2
+      - name: ⚙ dotnet 3.1.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: ✓ ensure format
+        run: |
+          dotnet tool update -g --version 4.1.* dotnet-format
+          dotnet format -f src --check -v:diag
+
   build:
     name: build-${{ matrix.os }}
+    needs: dotnet-format
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -41,11 +56,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 2.1.x
-
-      - name: ✓ check formatting
-        run: |
-          dotnet tool update -g --version 4.1.* dotnet-format
-          dotnet format -f src --check -v:diag
 
       - name: 🙏 build
         run: dotnet build -m:1 -bl:build.binlog -p:VersionLabel="$GITHUB_REF.$GITHUB_RUN_NUMBER"
