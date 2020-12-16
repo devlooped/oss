@@ -72,7 +72,7 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: |
-            *.binlog
+            **/*.binlog
             logs/**/*.*
       
       # Only push CI package to sleet feed if building on ubuntu (fastest)
