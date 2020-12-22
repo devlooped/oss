@@ -1,32 +1,32 @@
 [file]
-	url = https://github.com/kzu/oss
+	url = https://github.com/devlooped/oss
 
 # don't sync the .netconfig itself, to avoid a loop
 [file ".netconfig"]
-	url = https://github.com/kzu/oss/blob/main/.netconfig
+	url = https://github.com/devlooped/oss/blob/main/.netconfig
 	skip
 
 # readme is always customized for the project
 [file "readme.md"]
-	url = https://github.com/kzu/oss/blob/main/readme.md
+	url = https://github.com/devlooped/oss/blob/main/readme.md
 	skip
 
 # icon is typically specific to each project
 [file "src/icon.png"]
-	url = https://github.com/kzu/oss/blob/main/src/icon.png
+	url = https://github.com/devlooped/oss/blob/main/src/icon.png
 	skip
 
 # the configuration needs repo-specific links to Discussions
 [file ".github/ISSUE_TEMPLATE/config.yml"]
-	url = https://github.com/kzu/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
+	url = https://github.com/devlooped/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
 	skip
 
 # we push pages to clarius.org, not needed for most consumers
 [file ".github/workflows/pages.yml"]
-	url = https://github.com/kzu/oss/blob/main/.github/workflows/pages.yml
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/pages.yml
 	skip
 
 # the Gemfile is used for the custom pages building too
 [file "Gemfile"]
-	url = https://github.com/kzu/oss/blob/main/Gemfile
+	url = https://github.com/devlooped/oss/blob/main/Gemfile
 	skip
