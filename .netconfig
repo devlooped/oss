@@ -30,3 +30,11 @@
 [file "Gemfile"]
 	url = https://github.com/devlooped/oss/blob/main/Gemfile
 	skip
+
+# sponsors images referenced directly by other repos
+[file "assets/images/sponsors.svg"]
+	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.svg
+	skip
+[file "assets/images/sponsors.png"]
+	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.png
+	skip
