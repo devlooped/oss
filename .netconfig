@@ -21,16 +21,6 @@
 	url = https://github.com/devlooped/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
 	skip
 
-# we push pages to clarius.org, not needed for most consumers
-[file ".github/workflows/pages.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/pages.yml
-	skip
-
-# the Gemfile is used for the custom pages building too
-[file "Gemfile"]
-	url = https://github.com/devlooped/oss/blob/main/Gemfile
-	skip
-
 # sponsors images referenced directly by other repos
 [file "assets/images/sponsors.svg"]
 	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.svg
