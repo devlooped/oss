@@ -1,6 +1,10 @@
 <Project>
   <!-- To extend/change the defaults, create a Directory.targets alongside this file -->
 
+  <PropertyGroup Condition="'$(CI)' == 'true' and '$(Language)' == 'C#'">
+    <DefineConstants>CI;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(IsPackable)' == ''">
     <!-- The Sdks\NuGet.Build.Tasks.Pack\build\NuGet.Build.Tasks.Pack.targets unconditionally sets 
         PackageId=AssemblyName if no PackageId is provided, and then defaults IsPackable=true if 
