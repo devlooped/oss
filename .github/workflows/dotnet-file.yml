@@ -50,6 +50,8 @@ jobs:
         with:
           base: main
           branch: dotnet-file-sync
+          delete-branch: true
+          labels: dependencies
           commit-message: Bump files with dotnet-file sync
           
             ${{ env.CHANGES }}
