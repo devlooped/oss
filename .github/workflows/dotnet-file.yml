@@ -1,6 +1,7 @@
 ﻿# Synchronizes .netconfig-configured files with dotnet-file
 name: dotnet-file
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
   push:
