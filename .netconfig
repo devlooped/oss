@@ -21,6 +21,11 @@
 	url = https://github.com/devlooped/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
 	skip
 
+# make release artifact uploading opt-in instead of enabled by default.
+[file ".github/workflows/release-artifacts.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/release-artifacts.yml
+	skip
+
 # sponsors images referenced directly by other repos
 [file "assets/images/sponsors.svg"]
 	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.svg
