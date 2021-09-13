@@ -5,8 +5,9 @@
     <DefineConstants>CI;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(IsPackable)' == '' and '$(PackAsTool)' == 'true'">
-    <IsPackable>true</IsPackable>
+  <PropertyGroup Condition="'$(IsPackable)' == ''">
+    <IsPackable Condition="'$(PackAsTool)' == 'true'">true</IsPackable>
+    <IsPackable Condition="'$(PackFolder)' != ''">true</IsPackable>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(IsPackable)' == ''">
