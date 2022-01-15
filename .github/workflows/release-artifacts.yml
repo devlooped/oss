@@ -23,7 +23,7 @@ jobs:
         run: dotnet build -m:1 -p:version=${GITHUB_REF#refs/*/v}
 
       - name: 🧪 test
-        run: dotnet test --no-build -m:1
+        uses: ./.github/workflows/test
 
       - name: 📦 pack
         run: dotnet pack -m:1 -p:version=${GITHUB_REF#refs/*/v}
