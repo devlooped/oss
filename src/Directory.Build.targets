@@ -113,6 +113,7 @@
     <ProjectProperty Include="RepositorySha" />
     <ProjectProperty Include="RepositoryCommit" />
     <ProjectProperty Include="RepositoryRoot" />
+    <ProjectProperty Include="RepositoryUrl" />
   </ItemGroup>
 
   <!-- Make sure the source control info is available before calling source generators -->
