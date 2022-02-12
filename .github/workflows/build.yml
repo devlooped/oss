@@ -47,7 +47,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2022, ubuntu-latest, macOS-latest]
+        os: [windows-latest, ubuntu-latest, macOS-latest]
     steps:
       - name: 🤘 checkout
         uses: actions/checkout@v2
@@ -57,7 +57,7 @@ jobs:
 
       - name: ⚙ dotnet
         uses: actions/setup-dotnet@v1
-        if: matrix.os != 'windows-2022'
+        if: matrix.os != 'windows-latest'
         with:
           dotnet-version: '6.0.x'
 
