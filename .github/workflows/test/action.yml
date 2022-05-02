@@ -27,7 +27,7 @@ runs:
             then
                 exit 0
             fi
-            # cat output, get failed test names, remote trailing whitespace, sort+dedupe, join as FQN~TEST with |, remove trailing |.
+            # cat output, get failed test names, remove trailing whitespace, sort+dedupe, join as FQN~TEST with |, remove trailing |.
             filter=$(cat ./output.log | grep -o -P '(?<=\sFailed\s)[\w\._]*' | sed 's/ *$//g' | sort -u | awk 'BEGIN { ORS="|" } { print("FullyQualifiedName~" $0) }' | grep -o -P '.*(?=\|$)')
             ((counter++))
         done
