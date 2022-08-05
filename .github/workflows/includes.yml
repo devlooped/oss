@@ -11,11 +11,11 @@ jobs:
   includes:
     runs-on: ubuntu-latest
     steps:
-      - name: 🔍 defaults
-        uses: ./.github/workflows/defaults
-
       - name: 🤘 checkout
         uses: actions/checkout@v2
+
+      - name: 🔍 defaults
+        uses: ./.github/workflows/defaults
 
       - name: +M▼ includes
         uses: devlooped/actions-include@v4

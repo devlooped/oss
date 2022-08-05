@@ -8,15 +8,14 @@ jobs:
   changelog:
     runs-on: ubuntu-latest
     steps:
-      - name: 🔍 defaults
-        uses: ./.github/workflows/defaults
-
       - name: 🤘 checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           ref: main
-          token: ${{ env.GH_TOKEN }}
+
+      - name: 🔍 defaults
+        uses: ./.github/workflows/defaults
 
       - name: ⚙ ruby
         uses: ruby/setup-ruby@v1

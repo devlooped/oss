@@ -14,6 +14,12 @@ jobs:
   sync:
     runs-on: windows-latest
     steps:
+      - name: 🤘 checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: main
+
       - name: 🔍 defaults
         uses: ./.github/workflows/defaults
 
@@ -32,13 +38,6 @@ jobs:
               $rate = gh api rate_limit | convertfrom-json | select -expandproperty rate
               echo "Rate limit has reset to $($rate.remaining) requests"
           }
-
-      - name: 🤘 checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: main
-          token: ${{ env.GH_TOKEN }}
 
       - name: 🔄 sync
         shell: pwsh
