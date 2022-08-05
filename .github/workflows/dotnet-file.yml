@@ -69,6 +69,7 @@ jobs:
           branch: dotnet-file-sync
           delete-branch: true
           labels: dependencies
+          author: ${{ env.BOT_AUTHOR }}
           committer: ${{ env.BOT_AUTHOR }}
           commit-message: ⬆️ Bump files with dotnet-file sync
           
