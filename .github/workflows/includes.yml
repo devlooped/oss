@@ -7,22 +7,29 @@ on:
     paths:
       - '**.md'    
 
+env:
+  BOT_LOGIN: ${{ secrets.BOT_LOGIN }}
+  BOT_NAME: ${{ secrets.BOT_NAME }}
+  BOT_EMAIL: ${{ secrets.BOT_EMAIL }}
+  BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+
 jobs:
   includes:
     runs-on: ubuntu-latest
     steps:
       - name: 🤘 checkout
         uses: actions/checkout@v2
+        with:
+          ref: main
+          token: ${{ env.BOT_TOKEN }}
 
       - name: +M▼ includes
         uses: devlooped/actions-include@v4
 
-      - name: ✍ pull request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          base: main
-          branch: markdown-includes
-          delete-branch: true
-          commit-message: +M▼ includes
-          title: +M▼ includes
-          body: +M▼ includes
+      - name: ✍ commit
+        run: |
+          git config --local user.name ${BOT_NAME}
+          git config --local user.email ${BOT_EMAIL}
+          git add .
+          git commit -m "+M▼ includes" || exit 0
+          git push
