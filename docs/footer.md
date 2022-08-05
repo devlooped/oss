@@ -2,7 +2,9 @@
 
 <!-- include sponsors.md -->
 
-<br>&nbsp;
+&nbsp;
+
 [![Sponsor this project](https://raw.githubusercontent.com/devlooped/sponsors/main/sponsor.png "Sponsor this project")](https://github.com/sponsors/devlooped)
-<br>&nbsp;
+&nbsp;
+
 [Learn more about GitHub Sponsors](https://github.com/sponsors)
