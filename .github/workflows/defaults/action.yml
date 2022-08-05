@@ -37,7 +37,7 @@ runs:
           if [ -z "$BOT_EMAIL_SECRET" ]
           then
             echo "Using default GITHUB_EMAIL as BOT_EMAIL"
-            BOT_EMAIL="$GITHUB_AUTHOR@users.noreply.github.com"
+            BOT_EMAIL="$GITHUB_ACTOR@users.noreply.github.com"
           else
             echo "Using custom BOT_EMAIL"
             BOT_EMAIL="$BOT_EMAIL_SECRET"
