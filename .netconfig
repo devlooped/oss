@@ -33,3 +33,6 @@
 [file "assets/images/sponsors.png"]
 	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.png
 	skip
+
+[file "docs/sponsors.md"]
+	url = https://github.com/devlooped/oss/blob/main/docs/sponsors.md
