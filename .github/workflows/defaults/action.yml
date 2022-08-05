@@ -1,0 +1,65 @@
+name: test
+description: runs dotnet tests with retry
+runs:
+  using: "composite"
+  steps:
+    - name: 🔍 GH_TOKEN
+      if: env.GH_TOKEN == ''
+      shell: bash
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN_SECRET: ${{ secrets.GH_TOKEN }}
+      run: |
+        if [ -z "${GH_TOKEN_SECRET}" ]
+        then
+          echo "Using default GITHUB_TOKEN"
+          echo "GH_TOKEN=${GITHUB_TOKEN}" >> $GITHUB_ENV
+        else
+          echo "Using custom GH_TOKEN"
+          echo "GH_TOKEN=${GH_TOKEN_SECRET}" >> $GITHUB_ENV
+        fi      
+
+    - name: 🔍 BOT_NAME
+      if: env.BOT_NAME == ''
+      shell: bash
+      env: 
+        BOT_NAME_SECRET: ${{ secrets.BOT_NAME }}
+      run: |
+        if [ -z "${BOT_NAME_SECRET}" ]
+        then
+          echo "Using default GITHUB_AUTHOR as BOT_NAME"
+          echo "BOT_NAME=${GITHUB_AUTHOR}" >> $GITHUB_ENV
+        else
+          echo "Using custom BOT_NAME"
+          echo "BOT_NAME=${BOT_NAME_SECRET}" >> $GITHUB_ENV
+        fi
+
+    - name: 🔍 BOT_EMAIL
+      if: env.BOT_EMAIL == ''
+      shell: bash
+      env: 
+        BOT_EMAIL_SECRET: ${{ secrets.BOT_EMAIL }}
+      run: |
+        if [ -z "${BOT_EMAIL_SECRET}" ]
+        then
+          echo "Using default GITHUB_AUTHOR as BOT_EMAIL"
+          echo "BOT_EMAIL=${GITHUB_AUTHOR}@users.noreply.github.com" >> $GITHUB_ENV
+        else
+          echo "Using custom BOT_EMAIL"
+          echo "BOT_EMAIL=${BOT_EMAIL_SECRET}" >> $GITHUB_ENV
+        fi
+
+    - name: 🔍 BOT_AUTHOR
+      if: env.BOT_AUTHOR == ''
+      shell: bash
+      env: 
+        BOT_AUTHOR_SECRET: ${{ secrets.BOT_AUTHOR }}
+      run: |
+        if [ -z "${BOT_AUTHOR_SECRET}" ]
+        then
+          echo "Using default BOT_NAME <$BOT_EMAIL> as BOT_AUTHOR"
+          echo "BOT_AUTHOR=${BOT_NAME} <${BOT_EMAIL}>" >> $GITHUB_ENV
+        else
+          echo "Using custom BOT_AUTHOR"
+          echo "BOT_AUTHOR=${BOT_AUTHOR_SECRET}" >> $GITHUB_ENV
+        fi

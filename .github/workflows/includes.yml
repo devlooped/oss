@@ -11,6 +11,9 @@ jobs:
   includes:
     runs-on: ubuntu-latest
     steps:
+      - name: 🔍 defaults
+        uses: ./.github/workflows/defaults
+
       - name: 🤘 checkout
         uses: actions/checkout@v2
 
@@ -23,6 +26,9 @@ jobs:
           base: main
           branch: markdown-includes
           delete-branch: true
+          labels: dependencies
+          committer: ${{ env.BOT_AUTHOR }}
           commit-message: +M▼ includes
           title: +M▼ includes
           body: +M▼ includes
+          token: ${{ env.GH_TOKEN }}

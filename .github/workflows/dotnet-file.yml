@@ -9,27 +9,13 @@ on:
 
 env:
   DOTNET_NOLOGO: true
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  BOT_AUTHOR: ${{ secrets.BOT_NAME }} <${{ secrets.BOT_EMAIL }}>
 
 jobs:
   sync:
     runs-on: windows-latest
     steps:
-      - name: 🔍 GH_TOKEN
-        if: env.GH_TOKEN == ''
-        shell: bash
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: echo "GH_TOKEN=${GITHUB_TOKEN}" >> $GITHUB_ENV
-
-      - name: 🔍 BOT_AUTHOR
-        if: ${{ env.BOT_NAME == '' || env.BOT_EMAIL == '' }}
-        shell: bash
-        env: 
-          BOT_NAME: ${{ secrets.BOT_NAME }}
-          BOT_EMAIL: ${{ secrets.BOT_EMAIL }}
-        run: echo "BOT_AUTHOR=${GITHUB_AUTHOR} <${GITHUB_AUTHOR}@users.noreply.github.com>" >> $GITHUB_ENV
+      - name: 🔍 defaults
+        uses: ./.github/workflows/defaults
 
       - name: ⌛ rate
         shell: pwsh
@@ -79,10 +65,10 @@ jobs:
           branch: dotnet-file-sync
           delete-branch: true
           labels: dependencies
+          committer: ${{ env.BOT_AUTHOR }}
           commit-message: ⬆️ Bump files with dotnet-file sync
           
             ${{ env.CHANGES }}
           title: "⬆️ Bump files with dotnet-file sync"
           body: ${{ env.CHANGES }}
           token: ${{ env.GH_TOKEN }}
-          author: ${{ env.BOT_AUTHOR }}
