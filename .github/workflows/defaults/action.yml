@@ -23,12 +23,13 @@ runs:
         then
           if [ -z "$BOT_NAME_SECRET" ]
           then
-            echo "Using default GITHUB_AUTHOR as BOT_NAME"
-            echo "BOT_NAME=$GITHUB_AUTHOR" >> $GITHUB_ENV
+            echo "Using default GITHUB_ACTOR as BOT_NAME"
+            BOT_NAME="$GITHUB_ACTOR"
           else
             echo "Using custom BOT_NAME"
-            echo "BOT_NAME=$BOT_NAME_SECRET" >> $GITHUB_ENV
+            BOT_NAME=$BOT_NAME_SECRET
           fi
+          echo "BOT_NAME=$BOT_NAME" >> $GITHUB_ENV
         fi
 
         if [ -z "$BOT_EMAIL"]
@@ -36,21 +37,23 @@ runs:
           if [ -z "$BOT_EMAIL_SECRET" ]
           then
             echo "Using default GITHUB_EMAIL as BOT_EMAIL"
-            echo "BOT_EMAIL=$GITHUB_AUTHOR@users.noreply.github.com" >> $GITHUB_ENV
+            BOT_EMAIL="$GITHUB_AUTHOR@users.noreply.github.com"
           else
             echo "Using custom BOT_EMAIL"
-            echo "BOT_EMAIL=$BOT_EMAIL_SECRET" >> $GITHUB_ENV
+            BOT_EMAIL="$BOT_EMAIL_SECRET"
           fi
+          echo "BOT_EMAIL=$BOT_EMAIL" >> $GITHUB_ENV
         fi
 
         if [ -z "$BOT_AUTHOR"]
         then
           if [ -z "$BOT_AUTHOR_SECRET" ]
           then
-          echo "Using default BOT_NAME <$BOT_EMAIL> as BOT_AUTHOR"
-            echo "BOT_AUTHOR=$BOT_NAME <$BOT_EMAIL>" >> $GITHUB_ENV
+            echo "Using default BOT_NAME <BOT_EMAIL> as BOT_AUTHOR"
+            BOT_AUTHOR="$BOT_NAME <$BOT_EMAIL>"
           else
             echo "Using custom BOT_AUTHOR"
-            echo "BOT_AUTHOR=$BOT_AUTHOR_SECRET" >> $GITHUB_ENV
+            BOT_AUTHOR="$BOT_AUTHOR_SECRET"
           fi
+          echo "BOT_AUTHOR=$BOT_AUTHOR" >> $GITHUB_ENV
         fi
