@@ -1,4 +1,4 @@
-name: +M▼ includes
+name: +Mᐁ includes
 on: 
   workflow_dispatch:
   push:
@@ -23,7 +23,15 @@ jobs:
           ref: main
           token: ${{ env.BOT_TOKEN }}
 
-      - name: +M▼ includes
+      - name: 🔍 defaults
+        uses: ./.github/workflows/defaults
+        env:
+          GH_TOKEN_SECRET: ${{ secrets.GH_TOKEN }}
+          BOT_NAME_SECRET: ${{ secrets.BOT_NAME }}
+          BOT_EMAIL_SECRET: ${{ secrets.BOT_EMAIL }}
+          BOT_AUTHOR_SECRET: ${{ secrets.BOT_AUTHOR }}
+
+      - name: +Mᐁ includes
         uses: devlooped/actions-include@v4
 
       - name: ✍ commit
@@ -31,5 +39,5 @@ jobs:
           git config --local user.name ${BOT_NAME}
           git config --local user.email ${BOT_EMAIL}
           git add .
-          git commit -m "+M▼ includes" || exit 0
+          git commit -m "+Mᐁ includes" || exit 0
           git push
