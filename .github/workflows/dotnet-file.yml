@@ -63,6 +63,9 @@ jobs:
             echo 'No changelog was generated'
           }
 
+      - name: +Mᐁ includes
+        uses: devlooped/actions-include@v1
+
       - name: ✍ pull request
         uses: peter-evans/create-pull-request@v3
         with:
