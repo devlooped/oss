@@ -77,12 +77,15 @@ In no particular order:
 3. GitHub Actions are provided for the CI/CD process as follows:
    - [Build](.github/workflows/build.yml): regular branch builds and PRs build, tested and packed on ubuntu-latest, 
      windows-latest and macOS-latest with `dotnet` build, test and pack respectively.
-   - [Tags](.github/workflows/tag.yml): when a tag is pushed, a changelog is calculated from the previous tag 
+   - [Tags](.github/workflows/changelog.yml): when a release is created, a changelog is calculated from the previous tag 
      and used as the body of a draft GitHub release. If the tag contains a prerelease 
-     label, the release is marked as such too. The [.github_changelog_generator](.github_changelog_generator) file 
+     label, the release is marked as such too. The [.github_changelog_generator](.github/.github_changelog_generator) file 
      defines [changelog generation options](https://github.com/github-changelog-generator/github-changelog-generator/wiki/Advanced-change-log-generation-examples).
    - [Release](.github/workflows/release.yml): the draft release can be reviewed and edited and when ready, published. 
      At this point, the release.yml workflow 
+   - [Includes](.github/workflows/includes.yml): allows using HTML includes in markdown files for 
+     easier content reuse. Readmes should include the 
+     [standard footer](https://github.com/devlooped/sponsors/raw/main/footer.md).
 
 4. `dotnet format` is enforced on builds to keep consistency with `.editorconfig`.
 
@@ -93,12 +96,3 @@ In no particular order:
 
 7. [Bug](.github/ISSUE_TEMPLATE/bug.md) and [Feature](.github/ISSUE_TEMPLATE/feature.md) issue templates 
    are provided.
-
-
-## Sponsors
-
-<h3 style="vertical-align: text-top" id="by-clarius">
-<img src="https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">&nbsp;&nbsp;by&nbsp;<a href="https://github.com/clarius">@clarius</a>&nbsp;<img src="https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">
-</h3>
-
-*[get mentioned here too](https://github.com/sponsors/devlooped)!*
