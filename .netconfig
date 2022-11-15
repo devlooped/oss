@@ -1,3 +1,8 @@
+# Original seed file, use with:
+# dotnet file init https://github.com/devlooped/oss/blob/main/.netconfig
+
+# .netconfig is awesome: https://dotnetconfig.org
+
 [file]
 	url = https://github.com/devlooped/oss
 
@@ -9,27 +14,4 @@
 # readme is always customized for the project
 [file "readme.md"]
 	url = https://github.com/devlooped/oss/blob/main/readme.md
-	skip
-
-# icon is typically specific to each project
-[file "src/icon.png"]
-	url = https://github.com/devlooped/oss/blob/main/src/icon.png
-	skip
-
-# the configuration needs repo-specific links to Discussions
-[file ".github/ISSUE_TEMPLATE/config.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
-	skip
-
-# make release artifact uploading opt-in instead of enabled by default.
-[file ".github/workflows/release-artifacts.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/release-artifacts.yml
-	skip
-
-# sponsors images referenced directly by other repos
-[file "assets/images/sponsors.svg"]
-	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.svg
-	skip
-[file "assets/images/sponsors.png"]
-	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.png
 	skip

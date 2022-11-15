@@ -1,4 +1,4 @@
-name: sponsor ❤️
+name: sponsor 💜
 on: 
   issues:
     types: [opened, edited, reopened]
@@ -16,7 +16,7 @@ jobs:
         if: env.token != ''
         uses: actions/checkout@v2
           
-      - name: ❤️ sponsor 
+      - name: 💜 sponsor 
         if: env.token != ''
         uses: devlooped/actions-sponsor@main
         with:
