@@ -8,6 +8,7 @@ on:
 jobs:
   sponsor:
     runs-on: ubuntu-latest
+    continue-on-error: true
     env:
       token: ${{ secrets.GH_TOKEN }}
     if: ${{ !endsWith(github.event.sender.login, '[bot]') && !endsWith(github.event.sender.login, 'bot') }}      
