@@ -1,4 +1,4 @@
-oss template
+![logo](https://github.com/devlooped/devlooped.github.io/blob/main/img/tiny.png) oss template
 ===
 
 For my new open source projects, this is the basic repository structure and build approach I'm going to use. 
