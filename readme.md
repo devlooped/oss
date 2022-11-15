@@ -13,7 +13,7 @@ For my new open source projects, this is the basic repository structure and buil
 After creating an empty repo (maybe with just a `readme.md`), just run:
 
 ```
-dotnet file add https://github.com/kzu/oss
+dotnet file add https://github.com/devlooped/oss
 ```
  
 This will fetch all files from this repo template and create a `.netconfig` file 
@@ -26,23 +26,26 @@ example:
 
 ```gitconfig
 [file]
-    url = https://github.com/kzu/oss
+	url = https://github.com/devlooped/oss
+
+# don't sync the .netconfig itself, to avoid a loop
 [file ".netconfig"]
-    url = https://github.com/kzu/oss/blob/main/.netconfig
-    skip
+	url = https://github.com/devlooped/oss/blob/main/.netconfig
+	skip
+
+# readme is always customized for the project
 [file "readme.md"]
-    url = https://github.com/kzu/oss/blob/main/readme.md
-    skip
-[file "src/icon.png"]
-    url = https://github.com/kzu/oss/blob/main/src/icon.png
-    skip
-[file ".github/ISSUE_TEMPLATE/config.yml"]
-    url = https://github.com/kzu/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
-    skip
+	url = https://github.com/devlooped/oss/blob/main/readme.md
+	skip
+
+# we'll be tweaking the build, say
+[file ".github/workflows/build.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
+	skip
  ```
 
 > NOTE: you can also download the raw [.netconfig](.netconfig) from this repository 
-> and run `dotnet file update` instead. It already contains skips for readme and icon.
+> and run `dotnet file update` instead. It already contains skips for the readme.
 
 ## Updating
 
@@ -58,6 +61,11 @@ You can also just list detected changes with:
 dotnet file changes
 ```
 
+Automation is provided via the [dotnet-file.yml](.github/workflows/dotnet-file.yml) 
+workflow, which runs daily and does a `dotnet file sync` and creates a PR in your 
+repository as needed, with a populated changelog to inspect the incoming changes.
+
+
 ## Design Choices
 
 In no particular order:
@@ -65,34 +73,39 @@ In no particular order:
 1. `src` folder contains `Directory.Build.props` and `Directory.Build.targets` 
    and those contain all the customizations for the build, packaging and versioning. 
    In the past I went crazy factoring the targets into multiple files with single 
-   purpose groupings and it [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) even for me, having written it all. So it's better to Keep Things Simple�.
+   purpose groupings and it bcomes [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) 
+   even for me, having written it all. So it's better to Keep Things Simple™.
    Logically related properties and items have a `Label` attribute as documentation.
    You can customize both by adding a `Directory.props` or `Directory.targets`, 
    which are imported at the end of both files.
 
 2. If a `src/Directory.Packages.props` is found, I turn on 
-   [centrally managed package versions](https://github.com/NuGet/Home/wiki/Centrally-managing-NuGet-package-versions), but it's not required. "Regular" versioning is more 
-   friendly with (as in it actually works) dependabot at the moment.
+   [centrally managed package versions](https://github.com/NuGet/Home/wiki/Centrally-managing-NuGet-package-versions), but it's not required.
     
 3. GitHub Actions are provided for the CI/CD process as follows:
-   - [Build](.github/workflows/build.yml): regular branch builds and PRs build, tested and packed on ubuntu-latest, 
-     windows-latest and macOS-latest with `dotnet` build, test and pack respectively.
-   - [Tags](.github/workflows/changelog.yml): when a release is created, a changelog is calculated from the previous tag 
-     and used as the body of a draft GitHub release. If the tag contains a prerelease 
-     label, the release is marked as such too. The [.github_changelog_generator](.github/.github_changelog_generator) file 
+   - [Build](.github/workflows/build.yml): regular branch builds and PRs build. By default, build and test 
+     jobs will run on `ubuntu-latest`. To customize this, create a `./.github/workflows/os-matrix.json` file in the 
+     repository, with the matrix to use for the build, such as `["windows-latest", "ubuntu-latest", "macOS-latest"]`. 
+   - [Changelog](.github/workflows/changelog.yml): when a release is released (not created, but actually released), 
+     a changelog is calculated and pushed to main. The [changelog.config](.github/workflows/changelog.config) file 
      defines [changelog generation options](https://github.com/github-changelog-generator/github-changelog-generator/wiki/Advanced-change-log-generation-examples).
-   - [Release](.github/workflows/release.yml): the draft release can be reviewed and edited and when ready, published. 
-     At this point, the release.yml workflow 
+   - [Release notes](.github/workflows/release-notes.yml): when a release (either draft or final) is published, 
+     the notes are generated using the same configuration above.
    - [Includes](.github/workflows/includes.yml): allows using HTML includes in markdown files for 
      easier content reuse. Readmes should include the 
-     [standard footer](https://github.com/devlooped/sponsors/raw/main/footer.md).
+     [standard footer](https://github.com/devlooped/sponsors/raw/main/footer.md) with:
+
+     ```
+     <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
+     ```
 
 4. `dotnet format` is enforced on builds to keep consistency with `.editorconfig`.
 
-5. [dependabot](.github/dependabot.yml) is configured to check for updated nuget packages every week.
+5. [dependabot](.github/dependabot.yml) is configured to check for updated nuget packages daily.
 
-6. A default [icon.png](src/icon.png) and strong-name key are provided by default too. These may be skipped 
-   as well in the `.netconfig` file if the intention is to customize them for a particular project.
+6. A default [strong-name key](src/kzu.snk) is provided by default too. If the project does not desire to 
+   strong-name the assemblies, it can be skipped as well in the `.netconfig` file. If present, the mentioned 
+   `Directory.Build.*` targets will automatically pick the file and strong name assemblies.
 
-7. [Bug](.github/ISSUE_TEMPLATE/bug.md) and [Feature](.github/ISSUE_TEMPLATE/feature.md) issue templates 
-   are provided.
+7. [Bug](.github/ISSUE_TEMPLATE/bug.md) template provided. No addiitonal config provided since the 
+   discussions URLs cannot be relative :(.
