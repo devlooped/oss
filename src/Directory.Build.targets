@@ -99,6 +99,15 @@
     <UpToDateCheck Include="@(None);@(Content);@(EmbeddedResource)" />
     <!-- We'll typically use ThisAssembly.Strings instead of the built-in resource manager codegen -->
     <EmbeddedResource Update="@(EmbeddedResource)"  Generator="" Condition="'$(EnableRexCodeGenerator)' != 'true'" />
+    <EmbeddedResource Update="@(EmbeddedResource)" Condition="'$(EnableRexCodeGenerator)' == 'true'">
+      <!-- Default to Just Works resources generation. See https://www.cazzulino.com/resources.html -->
+      <Generator>MSBuild:Compile</Generator>
+      <StronglyTypedFileName>$(IntermediateOutputPath)\$([MSBuild]::ValueOrDefault('%(RelativeDir)', '').Replace('\', '.').Replace('/', '.'))%(Filename).g$(DefaultLanguageSourceExtension)</StronglyTypedFileName>
+      <StronglyTypedLanguage>$(Language)</StronglyTypedLanguage>
+      <StronglyTypedNamespace Condition="'%(RelativeDir)' == ''">$(RootNamespace)</StronglyTypedNamespace>
+      <StronglyTypedNamespace Condition="'%(RelativeDir)' != ''">$(RootNamespace).$([MSBuild]::ValueOrDefault('%(RelativeDir)', '').Replace('\', '.').Replace('/', '.').TrimEnd('.'))</StronglyTypedNamespace>
+      <StronglyTypedClassName>%(Filename)</StronglyTypedClassName>
+    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="IsPackable" Returns="@(IsPackable)">
