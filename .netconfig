@@ -15,3 +15,14 @@
 [file "readme.md"]
 	url = https://github.com/devlooped/oss/blob/main/readme.md
 	skip
+
+# combine-prs.yml typically not needed nowadays with dependabot dep groups
+[file ".github/workflows/combine-prs.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/combine-prs.yml
+	skip
+
+# nuget config not needed unless using the limiting CPV instead of using 
+# the more flexible SDK-based approach: https://www.cazzulino.com/central-package-versions.html
+[file "src/nuget.config"]
+	url = https://github.com/devlooped/oss/blob/main/src/nuget.config
+	skip
