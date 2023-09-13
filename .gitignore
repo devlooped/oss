@@ -7,7 +7,6 @@ TestResults
 .vs
 .vscode
 .idea
-.sass-cache
 
 *.suo
 *.sdf
@@ -32,5 +31,6 @@ node_modules
 _site
 .jekyll-metadata
 .jekyll-cache
+.sass-cache
 Gemfile.lock
 package-lock.json
