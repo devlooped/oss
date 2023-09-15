@@ -26,3 +26,8 @@
 [file "src/nuget.config"]
 	url = https://github.com/devlooped/oss/blob/main/src/nuget.config
 	skip
+
+# strong-naming is less and less relevant nowadays
+[file "src/kzu.snk"]
+	url = https://github.com/devlooped/oss/blob/main/src/kzu.snk
+	skip	
