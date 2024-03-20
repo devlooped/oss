@@ -12,6 +12,7 @@ env:
   Configuration: Release
   PackOnBuild: true
   GeneratePackageOnBuild: true
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   
 jobs:
   publish:

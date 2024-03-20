@@ -21,6 +21,7 @@ env:
   VersionLabel: ${{ github.ref }}
   PackOnBuild: true
   GeneratePackageOnBuild: true
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   
 defaults:
   run:
