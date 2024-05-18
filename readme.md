@@ -13,11 +13,12 @@ For my new open source projects, this is the basic repository structure and buil
 After creating an empty repo (maybe with just a `readme.md`), just run:
 
 ```
-dotnet file add https://github.com/devlooped/oss
+dotnet file init https://github.com/devlooped/oss/blob/main/.netconfig
 ```
  
-This will fetch all files from this repo template and create a `.netconfig` file 
-containing all the downloaded entries. 
+This will fetch the given [dotnetconfig](https://dotnetconfig.org] and
+synchronize the configured files and create a [.netconfig](.netconfig) 
+in the repo containing all the downloaded entries for future sync.
 
 At this point, you should add a `skip` value to the `.netconfig` file for the entries 
 you don't want to keep up-to-date afterwards. The default skips would likely match 
@@ -73,7 +74,7 @@ In no particular order:
 1. `src` folder contains `Directory.Build.props` and `Directory.Build.targets` 
    and those contain all the customizations for the build, packaging and versioning. 
    In the past I went crazy factoring the targets into multiple files with single 
-   purpose groupings and it bcomes [quite hard to follow](https://github.com/moq/moq/tree/a76c3cea6/src/build) 
+   purpose groupings and it bcomes [quite hard to follow](https://github.com/devlooped/moq/tree/a76c3cea6/src/build) 
    even for me, having written it all. So it's better to Keep Things Simple™.
    Logically related properties and items have a `Label` attribute as documentation.
    You can customize both by adding a `Directory.props` or `Directory.targets`, 
