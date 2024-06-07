@@ -6,7 +6,6 @@
     <PackFolder>analyzers/dotnet/roslyn4.0</PackFolder>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <CustomAfterMicrosoftCSharpTargets>$(MSBuildThisFileDirectory)..\SponsorLink.targets</CustomAfterMicrosoftCSharpTargets>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <MergeAnalyzerAssemblies>true</MergeAnalyzerAssemblies>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
