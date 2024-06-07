@@ -1,0 +1,24 @@
+﻿name: analyzer
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  Configuration: Release
+  
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🤘 checkout
+        uses: actions/checkout@v4
+
+      - name: 🙏 build
+        run: dotnet build -m:1
+        working-directory: src/SponsorLink
+
+      - name: 🧪 test
+        run: dotnet test --no-build
+        working-directory: src/SponsorLink
