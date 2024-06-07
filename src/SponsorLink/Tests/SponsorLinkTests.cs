@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Devlooped.Tests;
 
-public class ManifestTests
+public class SponsorLinkTests
 {
     // We need to convert to jwk string since the analyzer project has merged the JWT assembly and types.
     public static string ToJwk(SecurityKey key)
@@ -32,9 +32,9 @@ public class ManifestTests
         var jwk = ToJwk(manifest.SecurityKey);
 
         // NOTE: sponsorable manifest doesn't have expiration date.
-        var status = Manifest.Validate(jwt, jwk, out var token, out var principal, false);
+        var status = SponsorLink.Validate(jwt, jwk, out var token, out var principal, false);
 
-        Assert.Equal(Manifest.Status.Valid, status);
+        Assert.Equal(ManifestStatus.Valid, status);
     }
 
     [Fact]
@@ -44,9 +44,9 @@ public class ManifestTests
         var jwt = manifest.ToJwt();
         var jwk = ToJwk(new RsaSecurityKey(RSA.Create()));
 
-        var status = Manifest.Validate(jwt, jwk, out var token, out var principal, false);
+        var status = SponsorLink.Validate(jwt, jwk, out var token, out var principal, false);
 
-        Assert.Equal(Manifest.Status.Invalid, status);
+        Assert.Equal(ManifestStatus.Invalid, status);
 
         // We should still be a able to read the data, knowing it may have been tampered with.
         Assert.NotNull(principal);
@@ -63,9 +63,9 @@ public class ManifestTests
         // Will be expired after this.
         Thread.Sleep(1000);
 
-        var status = Manifest.Validate(sponsor, jwk, out var token, out var principal, true);
+        var status = SponsorLink.Validate(sponsor, jwk, out var token, out var principal, true);
 
-        Assert.Equal(Manifest.Status.Expired, status);
+        Assert.Equal(ManifestStatus.Expired, status);
 
         // We should still be a able to read the data, even if expired (but not tampered with).
         Assert.NotNull(principal);
@@ -78,9 +78,9 @@ public class ManifestTests
         var manifest = SponsorableManifest.Create(new Uri("https://foo.com"), [new Uri("https://github.com/sponsors/bar")], "ASDF1234");
         var jwk = ToJwk(manifest.SecurityKey);
 
-        var status = Manifest.Validate("asdfasdf", jwk, out var token, out var principal, false);
+        var status = SponsorLink.Validate("asdfasdf", jwk, out var token, out var principal, false);
 
-        Assert.Equal(Manifest.Status.Unknown, status);
+        Assert.Equal(ManifestStatus.Unknown, status);
 
         // Nothing could be read at all.
         Assert.Null(principal);
@@ -98,7 +98,7 @@ public class ManifestTests
         // Org + personal sponsor
         var barSponsor = barSponsorable.Sign([new("sub", "kzu"), new("email", "me@bar.com"), new("roles", "org"), new("roles", "user")], expiration: TimeSpan.FromDays(30));
 
-        Assert.True(Manifest.TryRead(out var principal, 
+        Assert.True(SponsorLink.TryRead(out var principal, 
             [(fooSponsor, ToJwk(fooSponsorable.SecurityKey)), 
             (barSponsor, ToJwk(barSponsorable.SecurityKey))]));
 
@@ -121,7 +121,7 @@ public class ManifestTests
 
         var jwt = File.ReadAllText(path);
 
-        var status = Manifest.Validate(jwt,
+        var status = SponsorLink.Validate(jwt,
             """
             {
               "e": "AQAB",
@@ -131,6 +131,6 @@ public class ManifestTests
             """
             , out var token, out var principal, false);
 
-        Assert.Equal(Manifest.Status.Valid, status);
+        Assert.Equal(ManifestStatus.Valid, status);
     }
 }

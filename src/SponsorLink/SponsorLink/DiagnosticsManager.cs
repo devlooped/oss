@@ -28,15 +28,15 @@ class DiagnosticsManager
     /// <param name="sponsorable">The names of the sponsorable accounts that can be funded for the given product.</param>
     /// <param name="product">The product or project developed by the sponsorable(s).</param>
     /// <param name="prefix">Custom prefix to use for diagnostic IDs.</param>
-    /// <param name="kind">The kind of diagnostic to create.</param>
+    /// <param name="status">The kind of status diagnostic to create.</param>
     /// <returns>The given <see cref="DiagnosticDescriptor"/>.</returns>
-    /// <exception cref="NotImplementedException">The <paramref name="kind"/> is not one of the known ones.</exception>
-    public DiagnosticDescriptor GetDescriptor(string[] sponsorable, string product, string prefix, DiagnosticKind kind) => kind switch
+    /// <exception cref="NotImplementedException">The <paramref name="status"/> is not one of the known ones.</exception>
+    public DiagnosticDescriptor GetDescriptor(string[] sponsorable, string product, string prefix, SponsorStatus status) => status switch
     {
-        DiagnosticKind.Unknown => CreateUnknown(sponsorable, product, prefix),
-        DiagnosticKind.Sponsor => CreateSponsor(sponsorable, prefix),
-        DiagnosticKind.Expiring => CreateExpiring(sponsorable, prefix),
-        DiagnosticKind.Expired => CreateExpired(sponsorable, prefix),
+        SponsorStatus.Unknown => CreateUnknown(sponsorable, product, prefix),
+        SponsorStatus.Sponsor => CreateSponsor(sponsorable, prefix),
+        SponsorStatus.Expiring => CreateExpiring(sponsorable, prefix),
+        SponsorStatus.Expired => CreateExpired(sponsorable, prefix),
         _ => throw new NotImplementedException(),
     };
 
@@ -67,23 +67,23 @@ class DiagnosticsManager
     /// Gets the status of the given product based on a previously stored diagnostic.
     /// </summary>
     /// <param name="product">The product to check status for.</param>
-    /// <returns>Optional <see cref="DiagnosticKind"/> that was reported, if any.</returns>
-    public DiagnosticKind? GetStatus(string product)
+    /// <returns>Optional <see cref="SponsorStatus"/> that was reported, if any.</returns>
+    public SponsorStatus? GetStatus(string product)
     {
         // NOTE: the SponsorLinkAnalyzer.SetStatus uses diagnostic properties to store the 
         // kind of diagnostic as a simple string instead of the enum. We do this so that 
         // multiple analyzers or versions even across multiple products, which all would 
         // have their own enum, can still share the same diagnostic kind.
         if (Diagnostics.TryGetValue(product, out var diagnostic) &&
-            diagnostic.Properties.TryGetValue(nameof(DiagnosticKind), out var value))
+            diagnostic.Properties.TryGetValue(nameof(SponsorStatus), out var value))
         {
             // Switch on value matching DiagnosticKind names
             return value switch
             {
-                nameof(DiagnosticKind.Unknown) => DiagnosticKind.Unknown,
-                nameof(DiagnosticKind.Sponsor) => DiagnosticKind.Sponsor,
-                nameof(DiagnosticKind.Expiring) => DiagnosticKind.Expiring,
-                nameof(DiagnosticKind.Expired) => DiagnosticKind.Expired,
+                nameof(SponsorStatus.Unknown) => SponsorStatus.Unknown,
+                nameof(SponsorStatus.Sponsor) => SponsorStatus.Sponsor,
+                nameof(SponsorStatus.Expiring) => SponsorStatus.Expiring,
+                nameof(SponsorStatus.Expired) => SponsorStatus.Expired,
                 _ => null,
             };
         }

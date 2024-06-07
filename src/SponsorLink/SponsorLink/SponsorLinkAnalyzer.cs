@@ -19,15 +19,15 @@ namespace Devlooped.Sponsors;
 public class SponsorLinkAnalyzer : DiagnosticAnalyzer
 {
     static readonly int graceDays = int.Parse(Funding.Grace);
-    static readonly Dictionary<DiagnosticKind, DiagnosticDescriptor> descriptors = new()
+    static readonly Dictionary<SponsorStatus, DiagnosticDescriptor> descriptors = new()
     {
         // Requires:
         // <Constant Include="Funding.Product" Value="[PRODUCT_NAME]" />
         // <Constant Include="Funding.AnalyzerPrefix" Value="[PREFIX]" />
-        { DiagnosticKind.Unknown, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, DiagnosticKind.Unknown) },
-        { DiagnosticKind.Sponsor, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, DiagnosticKind.Sponsor) },
-        { DiagnosticKind.Expiring, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, DiagnosticKind.Expiring) },
-        { DiagnosticKind.Expired, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, DiagnosticKind.Expired) },
+        { SponsorStatus.Unknown, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, SponsorStatus.Unknown) },
+        { SponsorStatus.Sponsor, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, SponsorStatus.Sponsor) },
+        { SponsorStatus.Expiring, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, SponsorStatus.Expiring) },
+        { SponsorStatus.Expired, Diagnostics.GetDescriptor([.. Sponsorables.Keys], Funding.Product, Funding.Prefix, SponsorStatus.Expired) },
     };
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = descriptors.Values.ToImmutableArray();
@@ -72,8 +72,8 @@ public class SponsorLinkAnalyzer : DiagnosticAnalyzer
                         // This should never happen and would be a bug.
                         Debug.Assert(true, "We should have provided a diagnostic of some kind for " + Funding.Product);
                         // We'll report it as unknown as a fallback for now.
-                        ctx.ReportDiagnostic(Diagnostic.Create(descriptors[DiagnosticKind.Unknown], null,
-                            properties: ImmutableDictionary.Create<string, string?>().Add(nameof(DiagnosticKind), nameof(DiagnosticKind.Unknown)),
+                        ctx.ReportDiagnostic(Diagnostic.Create(descriptors[SponsorStatus.Unknown], null,
+                            properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Unknown)),
                             Funding.Product, Sponsorables.Keys.Humanize(ThisAssembly.Strings.Or)));
                     }
                 });
@@ -82,17 +82,17 @@ public class SponsorLinkAnalyzer : DiagnosticAnalyzer
 #pragma warning restore RS1013 // Start action has no registered non-end actions
     }
 
-    DiagnosticKind SetStatus(ImmutableArray<AdditionalText> manifests)
+    SponsorStatus SetStatus(ImmutableArray<AdditionalText> manifests)
     {
-        if (!Manifest.TryRead(out var claims, manifests.Select(text => 
+        if (!SponsorLink.TryRead(out var claims, manifests.Select(text => 
                 (text.GetText()?.ToString() ?? "", Sponsorables[Path.GetFileNameWithoutExtension(text.Path)]))) ||
             claims.GetExpiration() is not DateTime exp)
         {
             // report unknown, either unparsed manifest or one with no expiration (which we never emit).
-            Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[DiagnosticKind.Unknown], null,
-                properties: ImmutableDictionary.Create<string, string?>().Add(nameof(DiagnosticKind), nameof(DiagnosticKind.Unknown)),
+            Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[SponsorStatus.Unknown], null,
+                properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Unknown)),
                 Funding.Product, Sponsorables.Keys.Humanize(ThisAssembly.Strings.Or)));
-            return DiagnosticKind.Unknown;
+            return SponsorStatus.Unknown;
         }
         else if (exp < DateTime.Now)
         {
@@ -100,25 +100,25 @@ public class SponsorLinkAnalyzer : DiagnosticAnalyzer
             if (exp.AddDays(graceDays) < DateTime.Now)
             {
                 // report expiring soon
-                Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[DiagnosticKind.Expiring], null,
-                    properties: ImmutableDictionary.Create<string, string?>().Add(nameof(DiagnosticKind), nameof(DiagnosticKind.Expiring))));
-                return DiagnosticKind.Expiring;
+                Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[SponsorStatus.Expiring], null,
+                    properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Expiring))));
+                return SponsorStatus.Expiring;
             }
             else
             {
                 // report expired
-                Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[DiagnosticKind.Expired], null,
-                    properties: ImmutableDictionary.Create<string, string?>().Add(nameof(DiagnosticKind), nameof(DiagnosticKind.Expired))));
-                return DiagnosticKind.Expired;
+                Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[SponsorStatus.Expired], null,
+                    properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Expired))));
+                return SponsorStatus.Expired;
             }
         }
         else
         {
             // report sponsor
-            Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[DiagnosticKind.Sponsor], null,
-                properties: ImmutableDictionary.Create<string, string?>().Add(nameof(DiagnosticKind), nameof(DiagnosticKind.Sponsor)),
+            Diagnostics.Push(Funding.Product, Diagnostic.Create(descriptors[SponsorStatus.Sponsor], null,
+                properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Sponsor)),
                 Funding.Product));
-            return DiagnosticKind.Sponsor;
+            return SponsorStatus.Sponsor;
         }
     }
 }
