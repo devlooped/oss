@@ -98,8 +98,8 @@ public class SponsorLinkTests
         // Org + personal sponsor
         var barSponsor = barSponsorable.Sign([new("sub", "kzu"), new("email", "me@bar.com"), new("roles", "org"), new("roles", "user")], expiration: TimeSpan.FromDays(30));
 
-        Assert.True(SponsorLink.TryRead(out var principal, 
-            [(fooSponsor, ToJwk(fooSponsorable.SecurityKey)), 
+        Assert.True(SponsorLink.TryRead(out var principal,
+            [(fooSponsor, ToJwk(fooSponsorable.SecurityKey)),
             (barSponsor, ToJwk(barSponsorable.SecurityKey))]));
 
         // Can check role across both JWTs

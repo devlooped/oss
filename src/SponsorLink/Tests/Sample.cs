@@ -26,7 +26,7 @@ public class Sample(ITestOutputHelper output)
     [InlineData("", SponsorStatus.Sponsor)]
     public void Test(string culture, SponsorStatus kind)
     {
-        Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = 
+        Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
             culture == "" ? CultureInfo.InvariantCulture : CultureInfo.GetCultureInfo(culture);
 
         var diag = new DiagnosticsManager().GetDescriptor(["foo"], "bar", "FB", kind);

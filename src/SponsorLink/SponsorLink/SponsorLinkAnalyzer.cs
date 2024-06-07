@@ -84,7 +84,7 @@ public class SponsorLinkAnalyzer : DiagnosticAnalyzer
 
     SponsorStatus SetStatus(ImmutableArray<AdditionalText> manifests)
     {
-        if (!SponsorLink.TryRead(out var claims, manifests.Select(text => 
+        if (!SponsorLink.TryRead(out var claims, manifests.Select(text =>
                 (text.GetText()?.ToString() ?? "", Sponsorables[Path.GetFileNameWithoutExtension(text.Path)]))) ||
             claims.GetExpiration() is not DateTime exp)
         {
