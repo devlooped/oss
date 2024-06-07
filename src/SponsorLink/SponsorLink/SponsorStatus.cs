@@ -2,9 +2,9 @@
 namespace Devlooped.Sponsors;
 
 /// <summary>
-/// The kind of SponsorLink diagnostic being reported.
+/// The determined sponsoring status.
 /// </summary>
-public enum DiagnosticKind
+public enum SponsorStatus
 {
     /// <summary>
     /// Sponsorship status is unknown.

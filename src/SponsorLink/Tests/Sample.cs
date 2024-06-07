@@ -12,19 +12,19 @@ namespace Tests;
 public class Sample(ITestOutputHelper output)
 {
     [Theory]
-    [InlineData("es-AR", DiagnosticKind.Unknown)]
-    [InlineData("es-AR", DiagnosticKind.Expiring)]
-    [InlineData("es-AR", DiagnosticKind.Expired)]
-    [InlineData("es-AR", DiagnosticKind.Sponsor)]
-    [InlineData("en", DiagnosticKind.Unknown)]
-    [InlineData("en", DiagnosticKind.Expiring)]
-    [InlineData("en", DiagnosticKind.Expired)]
-    [InlineData("en", DiagnosticKind.Sponsor)]
-    [InlineData("", DiagnosticKind.Unknown)]
-    [InlineData("", DiagnosticKind.Expiring)]
-    [InlineData("", DiagnosticKind.Expired)]
-    [InlineData("", DiagnosticKind.Sponsor)]
-    public void Test(string culture, DiagnosticKind kind)
+    [InlineData("es-AR", SponsorStatus.Unknown)]
+    [InlineData("es-AR", SponsorStatus.Expiring)]
+    [InlineData("es-AR", SponsorStatus.Expired)]
+    [InlineData("es-AR", SponsorStatus.Sponsor)]
+    [InlineData("en", SponsorStatus.Unknown)]
+    [InlineData("en", SponsorStatus.Expiring)]
+    [InlineData("en", SponsorStatus.Expired)]
+    [InlineData("en", SponsorStatus.Sponsor)]
+    [InlineData("", SponsorStatus.Unknown)]
+    [InlineData("", SponsorStatus.Expiring)]
+    [InlineData("", SponsorStatus.Expired)]
+    [InlineData("", SponsorStatus.Sponsor)]
+    public void Test(string culture, SponsorStatus kind)
     {
         Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = 
             culture == "" ? CultureInfo.InvariantCulture : CultureInfo.GetCultureInfo(culture);
