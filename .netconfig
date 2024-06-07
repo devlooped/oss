@@ -26,12 +26,6 @@
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/analyzer.yml
 	skip
 
-# nuget config not needed unless using the limiting CPV instead of using 
-# the more flexible SDK-based approach: https://www.cazzulino.com/central-package-versions.html
-[file "src/nuget.config"]
-	url = https://github.com/devlooped/oss/blob/main/src/nuget.config
-	skip
-
 # strong-naming is less and less relevant nowadays
 [file "src/kzu.snk"]
 	url = https://github.com/devlooped/oss/blob/main/src/kzu.snk
