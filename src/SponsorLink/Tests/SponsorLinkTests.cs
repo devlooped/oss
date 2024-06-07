@@ -1,14 +1,6 @@
 ﻿extern alias Analyzer;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Analyzer::Devlooped.Sponsors;
 using Devlooped.Sponsors;
 using Microsoft.IdentityModel.Tokens;
@@ -98,9 +90,7 @@ public class SponsorLinkTests
         // Org + personal sponsor
         var barSponsor = barSponsorable.Sign([new("sub", "kzu"), new("email", "me@bar.com"), new("roles", "org"), new("roles", "user")], expiration: TimeSpan.FromDays(30));
 
-        Assert.True(SponsorLink.TryRead(out var principal,
-            [(fooSponsor, ToJwk(fooSponsorable.SecurityKey)),
-            (barSponsor, ToJwk(barSponsorable.SecurityKey))]));
+        Assert.True(SponsorLink.TryRead(out var principal, [(fooSponsor, ToJwk(fooSponsorable.SecurityKey)), (barSponsor, ToJwk(barSponsorable.SecurityKey))]));
 
         // Can check role across both JWTs
         Assert.True(principal.IsInRole("org"));
