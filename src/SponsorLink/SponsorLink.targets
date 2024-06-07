@@ -7,6 +7,9 @@
     <ShowSponsorLinkInProject Condition="$(ShowSponsorLinkInProject) == '' and '$(TargetFramework)' == 'netstandard2.0'">true</ShowSponsorLinkInProject>
     <!-- This ensures we expose only the main assembly in the Dependencies > Analyzers node -->
     <MergeAnalyzerAssemblies Condition="'$(MergeAnalyzerAssemblies)' == '' and '$(Configuration)' == 'Release'">true</MergeAnalyzerAssemblies>
+    <!-- If we are going to merge files, we need to copy local -->
+    <CopyLocalLockFileAssemblies Condition="'$(MergeAnalyzerAssemblies)' == 'true'">true</CopyLocalLockFileAssemblies>
+
     <!-- Read public key we validate manifests against -->
     <DevloopedJwk>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)SponsorLink/devlooped.pub.jwk'))</DevloopedJwk>
 
