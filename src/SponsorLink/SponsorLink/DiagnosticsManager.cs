@@ -99,7 +99,7 @@ class DiagnosticsManager
         DiagnosticSeverity.Info,
         isEnabledByDefault: true,
         description: ThisAssembly.Strings.Sponsor.Description,
-        helpLinkUri: ThisAssembly.Git.Url,
+        helpLinkUri: "https://github.com/devlooped#sponsorlink",
         "DoesNotSupportF1Help");
 
     static DiagnosticDescriptor CreateUnknown(string[] sponsorable, string product, string prefix) => new(
@@ -112,7 +112,7 @@ class DiagnosticsManager
         description: ThisAssembly.Strings.Unknown.Description(
             sponsorable.Humanize(x => $"https://github.com/sponsors/{x}"),
             string.Join(" ", sponsorable)),
-        helpLinkUri: "https://www.devlooped.com/SponsorLink/",
+        helpLinkUri: "https://github.com/devlooped#sponsorlink",
         WellKnownDiagnosticTags.NotConfigurable);
 
     static DiagnosticDescriptor CreateExpiring(string[] sponsorable, string prefix) => new(
@@ -123,7 +123,7 @@ class DiagnosticsManager
          DiagnosticSeverity.Warning,
          isEnabledByDefault: true,
          description: ThisAssembly.Strings.Expiring.Description(string.Join(" ", sponsorable)),
-         helpLinkUri: "https://www.devlooped.com/SponsorLink/github.html#auto-sync",
+         helpLinkUri: "https://github.com/devlooped#autosync",
          "DoesNotSupportF1Help", WellKnownDiagnosticTags.NotConfigurable);
 
     static DiagnosticDescriptor CreateExpired(string[] sponsorable, string prefix) => new(
@@ -134,6 +134,6 @@ class DiagnosticsManager
          DiagnosticSeverity.Warning,
          isEnabledByDefault: true,
          description: ThisAssembly.Strings.Expired.Description(string.Join(" ", sponsorable)),
-         helpLinkUri: "https://www.devlooped.com/SponsorLink/github.html#auto-sync",
+         helpLinkUri: "https://github.com/devlooped#autosync",
          "DoesNotSupportF1Help", WellKnownDiagnosticTags.NotConfigurable);
 }
