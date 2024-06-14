@@ -122,7 +122,7 @@
 Por favor considera apoyar el proyecto patrocinando en {links} y ejecutando posteriormente 'sponsors sync {spaced}'.</value>
   </data>
   <data name="Unknown_Message" xml:space="preserve">
-    <value>No se pudo determinar el estado de su patrocinio. Funcionalidades exclusivas para patrocinadores pueden no estar disponibles.</value>
+    <value>Por favor considere apoyar {0} patrocinando @{1} 🙏</value>
   </data>
   <data name="Unknown_Title" xml:space="preserve">
     <value>Estado de patrocinio desconocido</value>
@@ -140,7 +140,7 @@ Por favor considera apoyar el proyecto patrocinando en {links} y ejecutando post
     <value>Eres un verdadero héroe. Tu patrocinio ayuda a mantener el proyecto vivo y próspero 🙏.</value>
   </data>
   <data name="Sponsor_Message" xml:space="preserve">
-    <value>Gracias por apoyar a {0} con tu patrocinio de {1} 💟!</value>
+    <value>Gracias por apoyar a {0} con tu patrocinio 💟!</value>
   </data>
   <data name="Sponsor_Title" xml:space="preserve">
     <value>Eres un patrocinador del proyecto, eres lo máximo 💟!</value>
