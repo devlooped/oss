@@ -120,7 +120,7 @@
     <_VersionLabel>$(VersionLabel.Replace('refs/heads/', ''))</_VersionLabel>
     <_VersionLabel>$(_VersionLabel.Replace('refs/tags/v', ''))</_VersionLabel>
 
-<!-- For PRs, we just need a fixed package version numbered after the PR # itself, so remove the commits # at the end -->
+    <!-- For PRs, we just need a fixed package version numbered after the PR # itself, so remove the commits # at the end -->
     <_VersionLabel Condition="$(_VersionLabel.Contains('refs/pull/'))">$(VersionLabel.TrimEnd('.0123456789'))</_VersionLabel>
     <!-- Next replace the prefix for simply 'pr', so we end up with 'pr99/merge' by default -->
     <_VersionLabel>$(_VersionLabel.Replace('refs/pull/', 'pr'))</_VersionLabel>
