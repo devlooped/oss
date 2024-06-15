@@ -87,7 +87,7 @@
          has already run `sponsorlink [...] -autosync` at least once to turn it on. Otherwise, 
          this target won't run at all.
          -->
-    <Exec Command="sponsors sync --local --unattended" StandardErrorImportance="high" StandardOutputImportance="low" ConsoleToMSBuild="true" ContinueOnError="true">
+    <Exec Command="sponsor sync --local --unattended" StandardErrorImportance="high" StandardOutputImportance="low" ConsoleToMSBuild="true" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="SponsorsExitCode" />
       <Output TaskParameter="ConsoleOutput" PropertyName="SponsorsOutput" />
     </Exec>
