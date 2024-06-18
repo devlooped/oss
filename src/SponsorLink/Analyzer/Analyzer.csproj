@@ -29,4 +29,8 @@
     <None Update="buildTransitive\SponsorableLib.targets" Pack="true" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="C:\Code\devlooped.oss\src\SponsorLink\SponsorLink\ThisAssembly.cs" />
+  </ItemGroup>
+
 </Project>
