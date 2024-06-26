@@ -30,3 +30,5 @@
 [file "src/kzu.snk"]
 	url = https://github.com/devlooped/oss/blob/main/src/kzu.snk
 	skip	
+[file "src/SponsorLink/readme.md"]
+	weak
