@@ -20,7 +20,8 @@
     <!-- All GH manifests. For now, we don't support other funding platforms -->
     <SponsorManifest Include="$(SponsorLinkHome)/github/*.jwt" />
 
-    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="SourceItemType" />
+    <CompilerVisibleItemMetadata Include="SponsorManifest" MetadataName="ItemType" />
+
     <!-- To quickly exit if true -->
     <CompilerVisibleProperty Include="DesignTimeBuild" />
   </ItemGroup>
@@ -33,7 +34,7 @@
   <Target Name="SL" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun" DependsOnTargets="$(SLDependsOn)">
     <ItemGroup>
       <!-- Make manifests visible to analyzers -->
-      <AdditionalFiles Include="@(SponsorManifest -> Distinct())" SourceItemType="SponsorManifest" />
+      <AdditionalFiles Include="@(SponsorManifest -> Distinct())" />
     </ItemGroup>
   </Target>
 
