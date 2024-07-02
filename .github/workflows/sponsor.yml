@@ -9,14 +9,54 @@ jobs:
   sponsor:
     runs-on: ubuntu-latest
     continue-on-error: true
-    env:
-      token: ${{ secrets.DEVLOOPED_TOKEN }}
     if: ${{ !endsWith(github.event.sender.login, '[bot]') && github.event.sender.login != github.repository_owner }}      
     steps:
       - name: 🤘 checkout
-        if: env.token != ''
         uses: actions/checkout@v4
-          
+
+      - name: ⚙ install
+        run: dotnet tool update -g dotnet-sponsor --prerelease
+
+      - name: 💻 setup
+        run: |
+          sponsor --version
+          pushd ~
+          git config -f .sponsorlink/.netconfig sponsorlink.id devlooped.sponsors.ci
+
+      - name: 🧪 run
+        run: |
+          '${{ secrets.GITHUB_TOKEN }}' | sponsor sync ${{ github.repository_owner }} --tos --with-token
+          if ($LASTEXITCODE -eq -5) {
+              throw "Can not determine sponsorship with the provided token")
+          } else if ($LASTEXITCODE -eq -6) {
+              Write-Output "User is not sponsoring, skipping"
+              exit 0
+          } else if ($LASTEXITCODE -eq -3) {
+              Write-Output "${{ github.repository_owner }} is not set up for SponsorLink"
+              exit 0
+          } else if ($LASTEXITCODE -eq -4) {
+              Write-Output "${{ github.repository_owner }} SponsorLink manifest is invalid"
+              exit 0
+          } else if ($LASTEXITCODE -ne -0) {
+              Write-Output "Could not determine sponsor status"
+              exit $LASTEXITCODE
+          }
+
+          $roles = cat ~/.sponsorlink/github/${{ github.repository_owner }}.jwt | jq -R 'split(".") | .[1] | @base64d | fromjson | .roles[]'
+          if (($roles | jq 'select(. == "team")' -r) -eq "team") { 
+            Write-Output "User is a team member, skipping"
+            exit 0 
+          } elseif (($roles | jq 'select(. == "contrib")' -r) -eq "contrib") {
+            Write-Output "User is a contributor!"
+          } else {
+            Write-Output "User is a sponsor"
+            if (($roles | jq 'select(. == "org")' -r) -eq "org") {
+              Write-Output "  (indirectly as a sponsoring organization member)"
+            } elseif (($roles | jq 'select(. == "user")' -r) -eq "user") {
+              Write-Output "  (as a direct sponsor)"
+            }
+          }
+        
       - name: 💜 sponsor 
         if: env.token != ''
         uses: devlooped/actions-sponsor@main
