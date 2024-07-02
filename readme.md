@@ -3,6 +3,8 @@
 
 For my new open source projects, this is the basic repository structure and build approach I'm going to use. 
 
+dummy
+
 ## Goals
 
 1. Trivial to apply and update via [dotnet-file](https://github.com/kzu/dotnet-file) with just two simple `dotnet` commands.
