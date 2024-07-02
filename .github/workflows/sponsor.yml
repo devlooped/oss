@@ -11,7 +11,7 @@ jobs:
     continue-on-error: true
     env:
       token: ${{ secrets.DEVLOOPED_TOKEN }}
-    if: ${{ !endsWith(github.event.sender.login, '[bot]') && !endsWith(github.event.sender.login, 'bot') }}      
+    if: ${{ !endsWith(github.event.sender.login, '[bot]') && github.event.sender.login != github.repository_owner }}      
     steps:
       - name: 🤘 checkout
         if: env.token != ''
