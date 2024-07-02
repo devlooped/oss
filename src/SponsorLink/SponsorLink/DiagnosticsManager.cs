@@ -50,7 +50,8 @@ class DiagnosticsManager
     /// <returns>The removed diagnostic, or <see langword="null" /> if none was previously pushed.</returns>
     public void ReportOnce(Action<Diagnostic> report, string product = Funding.Product)
     {
-        if (Diagnostics.TryRemove(product, out var diagnostic))
+        if (Diagnostics.TryRemove(product, out var diagnostic) && 
+            GetStatus(diagnostic) != SponsorStatus.Grace)
         {
             // Ensure only one such diagnostic is reported per product for the entire process, 
             // so that we can avoid polluting the error list with duplicates across multiple projects.
@@ -75,52 +76,61 @@ class DiagnosticsManager
     /// https://github.com/dotnet/roslyn/blob/main/docs/analyzers/Analyzer%20Actions%20Semantics.md under Ordering of actions).
     /// </summary>
     /// <returns>Optional <see cref="SponsorStatus"/> that was reported, if any.</returns>
-    public SponsorStatus? GetStatus()
-    {
-        // NOTE: the SponsorLinkAnalyzer.SetStatus uses diagnostic properties to store the 
-        // kind of diagnostic as a simple string instead of the enum. We do this so that 
-        // multiple analyzers or versions even across multiple products, which all would 
-        // have their own enum, can still share the same diagnostic kind.
-        if (Diagnostics.TryGetValue(Funding.Product, out var diagnostic) &&
-            diagnostic.Properties.TryGetValue(nameof(SponsorStatus), out var value))
-        {
-            // Switch on value matching DiagnosticKind names
-            return value switch
-            {
-                nameof(SponsorStatus.Unknown) => SponsorStatus.Unknown,
-                nameof(SponsorStatus.Sponsor) => SponsorStatus.Sponsor,
-                nameof(SponsorStatus.Expiring) => SponsorStatus.Expiring,
-                nameof(SponsorStatus.Expired) => SponsorStatus.Expired,
-                _ => null,
-            };
-        }
-
-        return null;
-    }
+    /// <devdoc>
+    /// The SponsorLinkAnalyzer.GetOrSetStatus uses diagnostic properties to store the 
+    /// kind of diagnostic as a simple string instead of the enum. We do this so that 
+    /// multiple analyzers or versions even across multiple products, which all would 
+    /// have their own enum, can still share the same diagnostic kind.
+    /// </devdoc>
+    public SponsorStatus? GetStatus() 
+        => Diagnostics.TryGetValue(Funding.Product, out var diagnostic) ? GetStatus(diagnostic) : null;
 
     /// <summary>
     /// Gets the status of the <see cref="Funding.Product"/>, or sets it from 
     /// the given set of <paramref name="manifests"/> if not already set.
     /// </summary>
-    public SponsorStatus GetOrSetStatus(ImmutableArray<AdditionalText> manifests)
-        => GetOrSetStatus(() => manifests);
+    public SponsorStatus GetOrSetStatus(ImmutableArray<AdditionalText> manifests, AnalyzerConfigOptionsProvider options)
+        => GetOrSetStatus(() => manifests, () => options.GlobalOptions);
 
     /// <summary>
     /// Gets the status of the <see cref="Funding.Product"/>, or sets it from 
     /// the given analyzer <paramref name="options"/> if not already set.
     /// </summary>
     public SponsorStatus GetOrSetStatus(Func<AnalyzerOptions?> options)
-        => GetOrSetStatus(() => options().GetSponsorManifests());
+        => GetOrSetStatus(() => options().GetSponsorAdditionalFiles(), () => options()?.AnalyzerConfigOptionsProvider.GlobalOptions);
 
-    SponsorStatus GetOrSetStatus(Func<ImmutableArray<AdditionalText>> getManifests)
+    SponsorStatus GetOrSetStatus(Func<ImmutableArray<AdditionalText>> getAdditionalFiles, Func<AnalyzerConfigOptions?> getGlobalOptions)
     {
         if (GetStatus() is { } status)
             return status;
 
-        if (!SponsorLink.TryRead(out var claims, getManifests().Select(text =>
+        if (!SponsorLink.TryRead(out var claims, getAdditionalFiles().Where(x => x.Path.EndsWith(".jwt")).Select(text =>
                 (text.GetText()?.ToString() ?? "", Sponsorables[Path.GetFileNameWithoutExtension(text.Path)]))) ||
             claims.GetExpiration() is not DateTime exp)
         {
+            var noGrace = getGlobalOptions() is { } globalOptions && 
+               globalOptions.TryGetValue("build_property.SponsorLinkNoInstallGrace", out var value) &&
+               bool.TryParse(value, out var skipCheck) && skipCheck;
+
+            if (noGrace != true)
+            {
+                // Consider grace period if we can find the install time.
+                var installed = getAdditionalFiles()
+                    .Where(x => x.Path.EndsWith(".dll"))
+                    .Select(x => File.GetLastWriteTime(x.Path))
+                    .OrderByDescending(x => x)
+                    .FirstOrDefault();
+
+                if (installed != default && ((DateTime.Now - installed).TotalDays <= Funding.Grace))
+                {
+                    // report unknown, either unparsed manifest or one with no expiration (which we never emit).
+                    Push(Diagnostic.Create(KnownDescriptors[SponsorStatus.Unknown], null,
+                        properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Grace)),
+                        Funding.Product, Sponsorables.Keys.Humanize(Resources.Or)));
+                    return SponsorStatus.Grace;
+                }
+            }
+
             // report unknown, either unparsed manifest or one with no expiration (which we never emit).
             Push(Diagnostic.Create(KnownDescriptors[SponsorStatus.Unknown], null,
                 properties: ImmutableDictionary.Create<string, string?>().Add(nameof(SponsorStatus), nameof(SponsorStatus.Unknown)),
@@ -178,7 +188,19 @@ class DiagnosticsManager
         return diagnostic;
     }
 
-    internal static DiagnosticDescriptor CreateSponsor(string[] sponsorable, string prefix) => new(
+    SponsorStatus? GetStatus(Diagnostic? diagnostic) => diagnostic?.Properties.TryGetValue(nameof(SponsorStatus), out var value) == true
+        ? value switch
+        {
+            nameof(SponsorStatus.Grace) => SponsorStatus.Grace,
+            nameof(SponsorStatus.Unknown) => SponsorStatus.Unknown,
+            nameof(SponsorStatus.Sponsor) => SponsorStatus.Sponsor,
+            nameof(SponsorStatus.Expiring) => SponsorStatus.Expiring,
+            nameof(SponsorStatus.Expired) => SponsorStatus.Expired,
+            _ => null,
+        }
+        : null;
+
+internal static DiagnosticDescriptor CreateSponsor(string[] sponsorable, string prefix) => new(
         $"{prefix}100",
         Resources.Sponsor_Title,
         Resources.Sponsor_Message,
