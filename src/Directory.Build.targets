@@ -8,7 +8,7 @@
   <PropertyGroup Label="Build">
     <!-- Tests projects don't need API docs, typically -->
     <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == '' and $(IsTestProject) == 'true'">false</GenerateDocumentationFile>
-    <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == '' amd $(MSBuildProjectName.Contains('Tests'))">false</GenerateDocumentationFile>
+    <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == '' and $(MSBuildProjectName.Contains('Tests'))">false</GenerateDocumentationFile>
     <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == ''">true</GenerateDocumentationFile>
   </PropertyGroup>
   
