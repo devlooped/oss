@@ -63,7 +63,7 @@ class DiagnosticsManager
             using var accessor = mmf.CreateViewAccessor();
             if (accessor.ReadByte(0) == 0)
             {
-                accessor.Write(0, 1);
+                accessor.Write(0, (byte)1);
                 report(diagnostic);
                 Tracing.Trace($"👈{diagnostic.Severity.ToString().ToLowerInvariant()}:{Process.GetCurrentProcess().Id}:{Process.GetCurrentProcess().ProcessName}:{product}:{diagnostic.Id}");
             }
@@ -182,7 +182,7 @@ class DiagnosticsManager
             mutex.WaitOne();
             using var mmf = CreateOrOpenMemoryMappedFile(id, 1);
             using var accessor = mmf.CreateViewAccessor();
-            accessor.Write(0, 0);
+            accessor.Write(0, (byte)0);
             Tracing.Trace($"👉{diagnostic.Severity.ToString().ToLowerInvariant()}:{Process.GetCurrentProcess().Id}:{Process.GetCurrentProcess().ProcessName}:{product}:{diagnostic.Id}");
         }
 
@@ -201,7 +201,7 @@ class DiagnosticsManager
         }
         : null;
 
-    static MemoryMappedFile CreateOrOpenMemoryMappedFile(string mapName, long capacity)
+    static MemoryMappedFile CreateOrOpenMemoryMappedFile(string mapName, int capacity)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
@@ -210,7 +210,11 @@ class DiagnosticsManager
         else
         {
             // On Linux, use a file-based memory-mapped file
-            return MemoryMappedFile.CreateFromFile($"/tmp/{mapName}", FileMode.OpenOrCreate);
+            string filePath = $"/tmp/{mapName}";
+            using (var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                fs.Write(new byte[capacity], 0, capacity);
+
+            return MemoryMappedFile.CreateFromFile(filePath, FileMode.OpenOrCreate);
         }
     }
 
