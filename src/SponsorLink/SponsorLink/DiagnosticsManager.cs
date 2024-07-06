@@ -210,12 +210,7 @@ class DiagnosticsManager
         else
         {
             // On Linux, use a file-based memory-mapped file
-            string filePath = $"/tmp/{mapName}";
-            using (var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
-            {
-                fs.SetLength(capacity);
-                return MemoryMappedFile.CreateFromFile(fs, mapName, capacity, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
-            }
+            return MemoryMappedFile.CreateFromFile($"/tmp/{mapName}", FileMode.OpenOrCreate);
         }
     }
 
