@@ -6,6 +6,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <CoreCompileDependsOn>CoreResGen;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+    <FundingPackageId>SponsorLink</FundingPackageId>
   </PropertyGroup>
 
   <PropertyGroup Label="SponsorLink">
