@@ -23,9 +23,6 @@
   <ItemGroup>
     <!-- This project reference allows debugging the source generator/analyzer project -->
     <ProjectReference Include="..\Analyzer\Analyzer.csproj" Aliases="Analyzer" />
-    <Analyzer Include="..\Analyzer\bin\$(Configuration)\netstandard2.0\*.dll" Visible="false" />
-    <!-- Make sure we only annotate the primary analyzer file, as it would when the package is installed -->
-    <Analyzer Update="@(Analyzer -&gt; WithMetadataValue('Filename', 'SponsorableLib.Analyzers'))" NuGetPackageId="SponsorableLib" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +32,15 @@
     <Constant Include="PrivateKey" Value="$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)keys\kzu.key.jwk'))" />
     <Constant Include="PublicKey" Value="$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)keys\kzu.pub.jwk'))" />
   </ItemGroup>
+
+  <Target Name="AddBuiltAnalyzers" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+    <!-- Waits until after building the referenced analyzer project when all binaries are in the output dir -->
+    <ItemGroup>
+      <Analyzer Include="..\Analyzer\bin\$(Configuration)\netstandard2.0\*.dll" Visible="false" />
+      <!-- Make sure we only annotate the primary analyzer file, as it would when the package is installed -->
+      <Analyzer Update="@(Analyzer -&gt; WithMetadataValue('Filename', 'SponsorableLib.Analyzers'))" NuGetPackageId="SponsorableLib" />
+    </ItemGroup>
+  </Target>
 
   <Target Name="Sample_GitConfig" Condition="'$(SourceControlInformationFeatureSupported)' == 'true'" DependsOnTargets="InitializeSourceControlInformation">
     <!-- Follows recommendation from Microsoft.Common.CurrentVersion.targets on how to depend on SCC info. -->
