@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   sync:
-    runs-on: windows-latest 
+    runs-on: ubuntu-latest 
     continue-on-error: true
     steps:
       - name: 🤖 defaults
@@ -31,7 +31,7 @@ jobs:
           token: ${{ env.GH_TOKEN }}
 
       - name: ⌛ rate
-        if: github.event_name != 'workflow_dispatch' && github.event_name != 'workflow_call'
+        if: github.event_name != 'workflow_dispatch'
         run: |
           # add random sleep since we run on fixed schedule
           sleep (get-random -max 60)
@@ -49,6 +49,8 @@ jobs:
       - name: 🔄 sync
         run: |
           dotnet tool update -g dotnet-gcm
+          # store credentials in plaintext for linux compat
+          git config --local credential.credentialStore plaintext
           dotnet gcm store --protocol=https --host=github.com --username=$env:GITHUB_ACTOR --password=$env:GH_TOKEN
           gh auth status
 
@@ -64,7 +66,7 @@ jobs:
           }
 
       - name: +Mᐁ includes
-        uses: devlooped/actions-include@v1
+        uses: devlooped/actions-include@main
         with:
           validate: false
 
