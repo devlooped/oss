@@ -11,6 +11,6 @@ env:
   DOTNET_NOLOGO: true
 
 jobs:
-  sync:
+  run:
     uses: devlooped/oss/.github/workflows/dotnet-file-core.yml@reusable
     secrets: inherit
