@@ -55,18 +55,19 @@ jobs:
           gh auth status
 
           dotnet tool update -g dotnet-file
-          dotnet file sync -c:$env:TEMP\dotnet-file.md
-          if (test-path $env:TEMP\dotnet-file.md) {
+          $changelog = "$([System.IO.Path]::GetTempPath())dotnet-file.md"
+          dotnet file sync -c:$changelog
+          if (test-path $changelog) {
             echo 'CHANGES<<EOF' >> $env:GITHUB_ENV
-            cat $env:TEMP\dotnet-file.md >> $env:GITHUB_ENV
+            cat $changelog >> $env:GITHUB_ENV
             echo 'EOF' >> $env:GITHUB_ENV
-            cat $env:TEMP\dotnet-file.md
+            cat $changelog
           } else {
             echo 'No changelog was generated'
           }
 
       - name: +Mᐁ includes
-        uses: devlooped/actions-include@main
+        uses: devlooped/actions-includes@main
         with:
           validate: false
 
