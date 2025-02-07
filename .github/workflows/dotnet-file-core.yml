@@ -67,7 +67,7 @@ jobs:
           }
 
       - name: +Mᐁ includes
-        uses: devlooped/actions-includes@main
+        uses: devlooped/actions-includes@v1
         with:
           validate: false
 
