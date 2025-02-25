@@ -13,4 +13,7 @@ env:
 jobs:
   run:
     uses: devlooped/oss/.github/workflows/dotnet-file-core.yml@main
-    secrets: inherit
+    secrets: 
+      BOT_NAME: ${{ secrets.BOT_NAME }}
+      BOT_EMAIL: ${{ secrets.BOT_EMAIL }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
