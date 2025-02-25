@@ -12,6 +12,8 @@ env:
 
 jobs:
   run:
+    permissions:
+      contents: write
     uses: devlooped/oss/.github/workflows/dotnet-file-core.yml@main
     secrets: 
       BOT_NAME: ${{ secrets.BOT_NAME }}
