@@ -8,7 +8,7 @@ runs:
       id: dotnet
       shell: bash
       run: |
-        VERSIONS=$(gh api /repos/${{ github.repository }}/properties/values | jq -r '.[] | select(.property_name == "DOTNET") | .value')
+        VERSIONS=$(gh api repos/${{ github.repository }}/properties/values | jq -r '.[] | select(.property_name == "DOTNET") | .value')
         # Remove extra whitespace from VERSIONS
         VERSIONS=$(echo "$VERSIONS" | tr -s ' ' | tr -d ' ')
         # Convert comma-separated to newline-separated
