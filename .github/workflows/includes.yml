@@ -1,4 +1,4 @@
-name: +Mᐁ includes
+name: +M▼ includes
 on: 
   workflow_dispatch:
   push:
@@ -28,20 +28,13 @@ jobs:
         with: 
           token: ${{ env.GH_TOKEN }}
 
-      - name: +Mᐁ includes
-        uses: devlooped/actions-includes@v1
+      - name: +M▼ includes
+        uses: devlooped/actions-include@v4
 
-      - name: ✍ pull request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          add-paths: '**.md'
-          base: main
-          branch: markdown-includes
-          delete-branch: true
-          labels: docs
-          author: ${{ env.BOT_AUTHOR }}
-          committer: ${{ env.BOT_AUTHOR }}
-          commit-message: +Mᐁ includes
-          title: +Mᐁ includes
-          body: +Mᐁ includes
-          token: ${{ env.GH_TOKEN }}
+      - name: ✍ commit
+        run: |
+          git config --local user.name ${{ env.BOT_AUTHOR }}
+          git config --local user.email ${{ env.BOT_EMAIL }}
+          git add .
+          git commit -m "+M▼ includes" || exit 0
+          git push
