@@ -31,3 +31,7 @@
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/dotnet-file-core.yml
 	skip
 
+# this is obsolete now since we use dotnet-env instead
+[file ".github/actions/dotnet/action.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/actions/dotnet/action.yml
+    skip
