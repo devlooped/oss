@@ -57,6 +57,9 @@ dotnet_style_require_accessibility_modifiers = omit_if_default:error
 # IDE0040: Add accessibility modifiers
 dotnet_diagnostic.IDE0040.severity = error
 
+# IDE1100: Error reading content of source file 'Project.TargetFrameworkMoniker' (i.e. from ThisAssembly)
+dotnet_diagnostic.IDE1100.severity = none
+
 [*.cs]
 # Top-level files are definitely OK
 csharp_using_directive_placement = outside_namespace:silent
