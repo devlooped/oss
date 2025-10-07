@@ -14,7 +14,7 @@ indent_size = 4
 
 # Xml project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,msbuildproj,props,targets}]
-indent_size = 2
+indent_size = 4
 
 # Xml config files
 [*.{ruleset,config,nuspec,resx,vsixmanifest,vsct}]
@@ -30,6 +30,9 @@ indent_size = 2
 
 # Dotnet code style settings:
 [*.{cs,vb}]
+tab_width = 4
+end_of_line = crlf
+
 # Sort using and Import directives with System.* appearing first
 dotnet_sort_system_directives_first = true
 # Avoid "this." and "Me." if not necessary
