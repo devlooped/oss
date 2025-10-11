@@ -31,7 +31,6 @@ indent_size = 2
 # Dotnet code style settings:
 [*.{cs,vb}]
 tab_width = 4
-end_of_line = crlf
 
 # Sort using and Import directives with System.* appearing first
 dotnet_sort_system_directives_first = true
