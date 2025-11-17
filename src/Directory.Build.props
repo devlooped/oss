@@ -1,4 +1,4 @@
-<Project>
+<Project TreatAsLocalProperty="VersionPrefix">
   <!-- To extend/change the defaults, create a Directory.props alongside this file -->
 
   <PropertyGroup Label="CI" Condition="'$(CI)' == ''">
@@ -136,6 +136,15 @@
     <VersionSuffix Condition="!$(VersionLabel.Contains('refs/tags/'))">$(_VersionLabel)</VersionSuffix>
     <!-- Special case for tags, the label is actually the version. Backs compat since passed-in value overrides MSBuild-set one -->
     <Version Condition="$(VersionLabel.Contains('refs/tags/'))">$(_VersionLabel)</Version>
+
+    <!-- In order for latest from main/master to always be greatest when using -prerelease switch on install/run, 
+         we change the scheme as follows:
+         - main/master remain as today: VersionPrefix: 42.42.${{ github.run_number }}  (from yaml)
+         - others: VersionPrefix: 42.42.0-[label].${{ github.run_number }}
+    -->
+    <IsMaster Condition="$(VersionLabel.Contains('refs/heads/main')) or $(VersionLabel.Contains('refs/heads/master'))">true</IsMaster>
+    <VersionPrefix Condition="'$(IsMaster)' != 'true'">42.42.0</VersionPrefix>
+    <VersionSuffix Condition="'$(IsMaster)' != 'true'">$(VersionSuffix).$(GITHUB_RUN_NUMBER)</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup Label="ThisAssembly.Project">
