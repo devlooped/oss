@@ -45,6 +45,8 @@
     <GeneratePathProperty>true</GeneratePathProperty>
     <!-- Avoid warnings for test projects when we run dotnet pack on the whole solution. -->
     <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+    <!-- See https://learn.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#prunepackagereference-specification -->
+    <RestoreEnablePackagePruning>true</RestoreEnablePackagePruning>
   </PropertyGroup>
 
   <PropertyGroup Label="Build">
