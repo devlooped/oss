@@ -72,6 +72,7 @@ jobs:
         run: dotnet build -m:1 -bl:build.binlog
 
       - name: 🧪 test
+        shell: pwsh
         run: dnx --yes retest -- --no-build
 
       - name: 🐛 logs
