@@ -54,7 +54,7 @@ jobs:
         with:
           add-paths: |
             **.md
-            osmfeula.txt
+            *.txt
           base: main
           branch: markdown-includes
           delete-branch: true
