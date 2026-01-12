@@ -12,7 +12,7 @@ on:
         - Release
         - Debug
   push:
-    branches: [ main, dev, 'dev/*', 'feature/*', 'rel/*' ]
+    branches: [ main, 'feature/*', 'rel/*' ]
     paths-ignore:
       - changelog.md
       - readme.md
