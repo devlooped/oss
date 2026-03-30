@@ -1,5 +1,5 @@
 // First run: dnx runfile https://github.com/devlooped/oss/blob/main/oss.cs --yes --alias oss
-// Subsequently: dnx runfile oss
+// Subsequently: dnx runfile oss --yes
 #:package Spectre.Console@*
 #:package CliWrap@*
 
