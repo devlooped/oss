@@ -16,9 +16,14 @@
 	url = https://github.com/devlooped/oss/blob/main/readme.md
 	skip
 
-# readme is always customized for the project
+# readme template unfolded by oss.cs
 [file "readme.tmp.md"]
 	url = https://github.com/devlooped/oss/blob/main/readme.tmp.md
+	skip
+
+# template unfold tool
+[file "oss.cs"]
+	url = https://github.com/devlooped/oss/blob/main/oss.cs
 	skip
 
 # This top-level MSBuild response file is not usually necessary nowadays
