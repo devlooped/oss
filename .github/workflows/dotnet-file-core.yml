@@ -54,6 +54,8 @@ jobs:
           }
 
       - name: 🔄 sync
+        env:
+          GCM_CREDENTIAL_STORE: cache
         run: |
           dotnet tool update -g dotnet-gcm
           # store credentials in plaintext for linux compat
