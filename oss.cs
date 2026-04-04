@@ -8,6 +8,7 @@ using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 string dotnet = Path.GetFullPath(
     Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..",
@@ -40,6 +41,18 @@ await RunDotNet("file init https://github.com/devlooped/oss/blob/main/.netconfig
 await RunDotNet($"new classlib -n {projectName} -o src/{projectName} -f net10.0", $"Creating class library src/{projectName}");
 await RunDotNet($"new xunit -n Tests -o src/Tests -f net10.0", "Creating xUnit test project src/Tests");
 await RunDotNet($"add src/Tests/Tests.csproj reference src/{projectName}/{projectName}.csproj", $"Adding reference from Tests to {projectName}");
+
+var doc = XDocument.Load($"src/{projectName}/{projectName}.csproj", LoadOptions.None);
+doc.Root?.Element("PropertyGroup")?.Element("ImplicitUsings")?.Remove();
+doc.Root?.Element("PropertyGroup")?.Element("Nullable")?.Remove();
+doc.Save($"src/{projectName}/{projectName}.csproj");
+
+doc = XDocument.Load($"src/Tests/Tests.csproj", LoadOptions.None);
+doc.Root?.Element("PropertyGroup")?.Element("ImplicitUsings")?.Remove();
+doc.Root?.Element("PropertyGroup")?.Element("Nullable")?.Remove();
+doc.Root?.Element("PropertyGroup")?.Element("IsPackable")?.Remove();
+doc.Save($"src/Tests/Tests.csproj");
+
 await RunDotNet($"new solution -n {projectName}", $"Creating solution {projectName}.slnx");
 await RunDotNet($"sln {projectName}.slnx add --in-root src/{projectName}/{projectName}.csproj src/Tests/Tests.csproj", $"Adding projects to {projectName}.slnx");
 
