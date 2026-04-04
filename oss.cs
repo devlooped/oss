@@ -8,8 +8,6 @@ using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using CliWrap;
-using Spectre.Console;
 
 string dotnet = Path.GetFullPath(
     Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..",
@@ -43,7 +41,7 @@ await RunDotNet($"new classlib -n {projectName} -o src/{projectName} -f net10.0"
 await RunDotNet($"new xunit -n Tests -o src/Tests -f net10.0", "Creating xUnit test project src/Tests");
 await RunDotNet($"add src/Tests/Tests.csproj reference src/{projectName}/{projectName}.csproj", $"Adding reference from Tests to {projectName}");
 await RunDotNet($"new solution -n {projectName}", $"Creating solution {projectName}.slnx");
-await RunDotNet($"sln {projectName}.slnx add src/{projectName}/{projectName}.csproj src/Tests/Tests.csproj", $"Adding projects to {projectName}.slnx");
+await RunDotNet($"sln {projectName}.slnx add --in-root src/{projectName}/{projectName}.csproj src/Tests/Tests.csproj", $"Adding projects to {projectName}.slnx");
 
 await AnsiConsole.Status()
     .Spinner(Spinner.Known.Dots)
