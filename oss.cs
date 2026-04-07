@@ -56,6 +56,15 @@ doc.Root?.Element("PropertyGroup")?.Element("Nullable")?.Remove();
 doc.Root?.Element("PropertyGroup")?.Element("IsPackable")?.Remove();
 doc.Save($"src/Tests/Tests.csproj");
 
+File.WriteAllText($"src/Directory.props",
+    """
+    <Project>
+      <PropertyGroup>
+        <ImplicitUsings>true</ImplicitUsings>
+      </PropertyGroup>
+    </Project>
+    """);
+
 await RunDotNet($"new solution -n {projectName}", $"Creating solution {projectName}.slnx");
 await RunDotNet($"sln {projectName}.slnx add --in-root src/{projectName}/{projectName}.csproj src/Tests/Tests.csproj", $"Adding projects to {projectName}.slnx");
 
