@@ -45,6 +45,7 @@ await RunDotNet($"add src/Tests/Tests.csproj reference src/{projectName}/{projec
 var doc = XDocument.Load($"src/{projectName}/{projectName}.csproj", LoadOptions.None);
 doc.Root?.Element("PropertyGroup")?.Element("ImplicitUsings")?.Remove();
 doc.Root?.Element("PropertyGroup")?.Element("Nullable")?.Remove();
+doc.Root?.Element("PropertyGroup")?.Add(new XElement("PackageId", packageId));
 doc.Save($"src/{projectName}/{projectName}.csproj");
 
 doc = XDocument.Load($"src/Tests/Tests.csproj", LoadOptions.None);
