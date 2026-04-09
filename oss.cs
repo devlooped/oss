@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using CliWrap;
+using Spectre.Console;
 
 string dotnet = Path.GetFullPath(
     Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..",
