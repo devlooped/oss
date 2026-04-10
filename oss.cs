@@ -42,6 +42,7 @@ AnsiConsole.WriteLine();
 await RunDotNet("file init https://github.com/devlooped/oss/blob/main/.netconfig", "Initializing dotnet file sync from devlooped/oss");
 await RunDotNet($"new classlib -n {projectName} -o src/{projectName} -f net10.0", $"Creating class library src/{projectName}");
 File.Delete($"src/{projectName}/Class1.cs");
+await RunDotNet($"package add NuGetizer --project src/{projectName}/{projectName}.csproj", "Adding NuGetizer");
 await RunDotNet($"new xunit -n Tests -o src/Tests -f net10.0", "Creating xUnit test project src/Tests");
 File.Delete($"src/Tests/UnitTest1.cs");
 await RunDotNet($"add src/Tests/Tests.csproj reference src/{projectName}/{projectName}.csproj", $"Adding reference from Tests to {projectName}");
