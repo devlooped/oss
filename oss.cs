@@ -60,9 +60,10 @@ doc.Root?.Element("PropertyGroup")?.Element("IsPackable")?.Remove();
 doc.Save($"src/Tests/Tests.csproj");
 
 File.WriteAllText($"src/Directory.props",
-    """
+    $"""
     <Project>
       <PropertyGroup>
+        <Product>{projectName}</Product>
         <ImplicitUsings>true</ImplicitUsings>
       </PropertyGroup>
     </Project>
