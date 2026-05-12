@@ -16,21 +16,34 @@ string dotnet = Path.GetFullPath(
     Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..",
     RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "dotnet.exe" : "dotnet"));
 
+// Parse optional --project, --repo and --package args
+string? argProject = null, argRepo = null, argPackage = null;
+for (var i = 0; i < args.Length; i++)
+{
+    if ((args[i] == "--project" || args[i] == "--repo" || args[i] == "--package") && i + 1 < args.Length)
+    {
+        if (args[i] == "--project") argProject = args[i + 1];
+        else if (args[i] == "--repo") argRepo = args[i + 1];
+        else if (args[i] == "--package") argPackage = args[i + 1];
+        i++; // skip the value
+    }
+}
+
 AnsiConsole.Write(new FigletText("devlooped oss").Color(Color.Green));
 AnsiConsole.WriteLine();
 
-var projectName = AnsiConsole.Prompt(
+var projectName = argProject ?? AnsiConsole.Prompt(
     new TextPrompt<string>("[green]Project name[/]:")
         .PromptStyle("yellow")
         .ValidationErrorMessage("[red]Project name cannot be empty[/]")
         .Validate(v => !string.IsNullOrWhiteSpace(v)));
 
-var repoName = AnsiConsole.Prompt(
+var repoName = argRepo ?? AnsiConsole.Prompt(
     new TextPrompt<string>("[green]Repo name[/]:")
         .PromptStyle("yellow")
         .DefaultValue(projectName));
 
-var packageId = AnsiConsole.Prompt(
+var packageId = argPackage ?? AnsiConsole.Prompt(
     new TextPrompt<string>("[green]Package ID[/]:")
         .PromptStyle("yellow")
         .DefaultValue($"Devlooped.{projectName}"));
