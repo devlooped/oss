@@ -2,28 +2,25 @@
 // Subsequently: dnx runfile oss --yes
 #:package Spectre.Console@*
 #:package CliWrap@*
-#:package System.CommandLine@2.0.7
+#:package ConsoleAppFramework@*
 
 using System;
-using System.CommandLine;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CliWrap;
+using ConsoleAppFramework;
 using Spectre.Console;
 
-var projectOption = new Option<string?>("--project", "Project name");
-var repoOption = new Option<string?>("--repo", "Repo name (defaults to project name)");
-var packageOption = new Option<string?>("--package", "Package ID (defaults to Devlooped.<project>)");
-
-var rootCommand = new RootCommand("devlooped OSS project scaffolding");
-rootCommand.AddOption(projectOption);
-rootCommand.AddOption(repoOption);
-rootCommand.AddOption(packageOption);
-
-rootCommand.SetHandler(async (argProject, argRepo, argPackage) =>
+await ConsoleApp.RunAsync(args, async (
+    /// <summary>Project name</summary>
+    string? project = null,
+    /// <summary>Repo name (defaults to project name)</summary>
+    string? repo = null,
+    /// <summary>Package ID (defaults to Devlooped.{project})</summary>
+    string? package = null) =>
 {
     string dotnet = Path.GetFullPath(
         Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..",
@@ -32,18 +29,18 @@ rootCommand.SetHandler(async (argProject, argRepo, argPackage) =>
     AnsiConsole.Write(new FigletText("devlooped oss").Color(Color.Green));
     AnsiConsole.WriteLine();
 
-    var projectName = argProject ?? AnsiConsole.Prompt(
+    var projectName = project ?? AnsiConsole.Prompt(
         new TextPrompt<string>("[green]Project name[/]:")
             .PromptStyle("yellow")
             .ValidationErrorMessage("[red]Project name cannot be empty[/]")
             .Validate(v => !string.IsNullOrWhiteSpace(v)));
 
-    var repoName = argRepo ?? AnsiConsole.Prompt(
+    var repoName = repo ?? AnsiConsole.Prompt(
         new TextPrompt<string>("[green]Repo name[/]:")
             .PromptStyle("yellow")
             .DefaultValue(projectName));
 
-    var packageId = argPackage ?? AnsiConsole.Prompt(
+    var packageId = package ?? AnsiConsole.Prompt(
         new TextPrompt<string>("[green]Package ID[/]:")
             .PromptStyle("yellow")
             .DefaultValue($"Devlooped.{projectName}"));
@@ -138,6 +135,4 @@ rootCommand.SetHandler(async (argProject, argRepo, argPackage) =>
             .ExecuteAsync();
         AnsiConsole.MarkupLine($"[green]✓[/] {Markup.Escape(description)}");
     }
-}, projectOption, repoOption, packageOption);
-
-return await rootCommand.InvokeAsync(args);
+});
