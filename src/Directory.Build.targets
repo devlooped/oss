@@ -32,6 +32,13 @@
     <IsPackable Condition="'$(PackageId)' != ''">true</IsPackable>
   </PropertyGroup>
   
+  <Import Project="$(NuGetBuildTasksPackTargets)" Condition="Exists('$(NuGetBuildTasksPackTargets)')"/>
+
+  <PropertyGroup>
+    <!-- Revert the forced PackageId by the NuGet SDK targets for non-packable projects, see https://github.com/NuGet/Home/issues/14928 -->
+    <PackageId Condition="'$(IsPackable)' == 'false'"></PackageId>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(IsPackable)' == 'true'" Label="NuGet">
     <!-- This is compatible with nugetizer and SDK pack -->
     <!-- Only difference is we don't copy either to output directory -->
