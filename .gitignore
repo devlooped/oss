@@ -8,6 +8,7 @@ results
 BenchmarkDotNet.Artifacts
 /app
 /mcps
+/temp
 .vs
 .vscode
 .genaiscript
