@@ -44,6 +44,16 @@ jobs:
           name: logs
           path: '*.binlog'
 
+      - name: ✅ validate
+        shell: pwsh
+        working-directory: bin
+        run: |
+          $invalid = Get-ChildItem -File -Filter "*.42.42*.nupkg"
+          if ($invalid) {
+            Write-Error "Found dev/local packages with disallowed 42.42* version prefix:`n$($invalid.Name -join "`n")"
+            exit 1
+          }
+
       - name: 🚀 nuget
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
