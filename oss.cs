@@ -22,9 +22,21 @@ await ConsoleApp.RunAsync(args, async (
     /// <summary>Package ID (defaults to Devlooped.{project})</summary>
     string? package = null) =>
 {
-    string dotnet = Path.GetFullPath(
-        Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..",
-        RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "dotnet.exe" : "dotnet"));
+    // Framework-dependent / R2R: muxer is three levels above the shared runtime.
+    // Native AOT (e.g. dnx go default publish) reports the app dir as the runtime
+    // directory, so that walk is wrong — use DOTNET_HOST_PATH / DOTNET_ROOT / PATH.
+    var fileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "dotnet.exe" : "dotnet";
+    var dotnet = Path.GetFullPath(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..", fileName));
+    if (!File.Exists(dotnet))
+    {
+        if (Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") is { Length: > 0 } host && File.Exists(host))
+            dotnet = host;
+        else if (Environment.GetEnvironmentVariable("DOTNET_ROOT") is { Length: > 0 } root
+            && File.Exists(Path.Combine(root, fileName)))
+            dotnet = Path.Combine(root, fileName);
+        else
+            dotnet = fileName; // PATH
+    }
 
     AnsiConsole.Write(new FigletText("devlooped oss").Color(Color.Green));
     AnsiConsole.WriteLine();
